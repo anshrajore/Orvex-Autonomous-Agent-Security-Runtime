@@ -68,6 +68,7 @@ export function Landing({
   onOpenGuide: () => void;
 }) {
   const [typedText, setTypedText] = useState('execute.');
+  const [devTab, setDevTab] = useState<'bio' | 'stack' | 'vision'>('bio');
   const phrases = ['execute.', 'build.', 'touch.', 'run.', 'access.'];
   
   useEffect(() => {
@@ -298,7 +299,7 @@ export function Landing({
 
                 <div className="rounded-xl border border-line bg-black p-4 font-mono text-xs text-neutral-300 mb-6">
                   <p className="text-dim"># Quickstart installation</p>
-                  <p className="text-white font-bold mt-1">npm install -g orvex</p>
+                  <p className="text-white font-bold mt-1">npm install -g orvex-cli</p>
                   <p className="text-white mt-1">orvex init && orvex run claude</p>
                 </div>
 
@@ -345,8 +346,8 @@ export function Landing({
 
                 <div className="rounded-xl border border-line bg-black p-4 font-mono text-xs text-neutral-300 mb-6">
                   <p className="text-dim"># Add to package dependencies</p>
-                  <p className="text-white font-bold mt-1">pnpm add @orvex/sdk</p>
-                  <p className="text-dim mt-1">import &#123; Orvex &#125; from '@orvex/sdk';</p>
+                  <p className="text-white font-bold mt-1">pnpm add @anshrajore/orvex-sdk</p>
+                  <p className="text-dim mt-1">import &#123; Orvex &#125; from '@anshrajore/orvex-sdk';</p>
                 </div>
 
                 <ul className="space-y-3 text-xs text-mute">
@@ -386,33 +387,156 @@ export function Landing({
       </section>
 
       {/* Developer Credits Section */}
-      <section className="py-20 border-t border-line bg-black">
-        <div className="mx-auto max-w-7xl px-6 text-center">
-          <Mark className="mx-auto h-12 w-12 mb-6" />
-          <h3 className="text-2xl font-bold tracking-tight text-white">
-            Built with precision by Ansh Rajore
-          </h3>
-          <p className="mt-3 max-w-xl mx-auto text-sm text-mute leading-relaxed">
-            Full-stack developer and AI / machine-learning enthusiast at Dark Arcane, based in Nashik.
-            Created to make autonomous AI agents safe to execute without restricting their intelligence.
-          </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <a
-              href="https://github.com/anshrajore"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-line bg-surface px-5 py-2 text-xs font-medium text-mute hover:text-white hover:border-dim transition-all"
-            >
-              GitHub / anshrajore
-            </a>
-            <a
-              href="https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-line bg-surface px-5 py-2 text-xs font-medium text-mute hover:text-white hover:border-dim transition-all"
-            >
-              Star Repository on GitHub
-            </a>
+      <section id="architect" className="py-24 border-t border-line bg-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.03),transparent_60%)]"></div>
+        <div className="mx-auto max-w-7xl px-6 relative z-10">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-dim px-3 py-1 rounded-full border border-line bg-surface">
+              SYSTEM ARCHITECT
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-white mt-4">
+              Ansh Rajore
+            </h2>
+            <p className="text-sm text-mute mt-2">
+              The engineer behind the Orvex Autonomous Agent Security Runtime.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch max-w-5xl mx-auto">
+            {/* Left side: Interactive Tab Selector & Bio Display */}
+            <div className="lg:col-span-6 flex flex-col justify-between">
+              <div>
+                <div className="flex gap-2 border-b border-line pb-4 mb-6">
+                  {(['bio', 'stack', 'vision'] as const).map((tab) => (
+                    <button
+                      key={tab}
+                      type="button"
+                      onClick={() => setDevTab(tab)}
+                      className={`px-4 py-2 rounded-xl text-xs font-mono uppercase tracking-wider transition-all border ${
+                        devTab === tab
+                          ? 'bg-white text-black font-semibold border-white shadow-glow'
+                          : 'text-mute hover:text-white border-transparent hover:border-line'
+                      }`}
+                    >
+                      {tab === 'bio' ? '01 // BIO' : tab === 'stack' ? '02 // STACK' : '03 // VISION'}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="min-h-[200px] leading-relaxed">
+                  {devTab === 'bio' && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-white tracking-tight">System Architect &amp; R&amp;D Lead</h3>
+                      <p className="text-sm text-mute">
+                        Ansh Rajore is a full-stack engineer and AI/machine-learning researcher based in Nashik, India. He builds core runtimes, compiler utilities, and zero-trust control planes under the **Dark Arcane** studio moniker.
+                      </p>
+                      <p className="text-sm text-mute">
+                        Recognizing that autonomous coding agents possess the potential to execute untrusted code or exfiltrate private credentials, Ansh designed Orvex as a lightweight, locally contained operating barrier to enforce policy and verify actions in real-time.
+                      </p>
+                    </div>
+                  )}
+
+                  {devTab === 'stack' && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-white tracking-tight">Architectural Engineering Stack</h3>
+                      <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                        <div className="p-3.5 rounded-xl border border-line bg-surface/50">
+                          <span className="text-dim block mb-1">SYSTEMS &amp; CORE</span>
+                          <span className="text-white">TypeScript / Node.js<br />Rust Core Runtimes<br />Linux / macOS POSIX API</span>
+                        </div>
+                        <div className="p-3.5 rounded-xl border border-line bg-surface/50">
+                          <span className="text-dim block mb-1">SECURITY &amp; IAAS</span>
+                          <span className="text-white">Bubblewrap (bwrap)<br />macOS Seatbelt (.sb)<br />Docker / Docker Compose</span>
+                        </div>
+                        <div className="p-3.5 rounded-xl border border-line bg-surface/50">
+                          <span className="text-dim block mb-1">AI &amp; PARSING</span>
+                          <span className="text-white">Command AST Tokenizers<br />Heuristic Regex Scanners<br />Model Context Protocol (MCP)</span>
+                        </div>
+                        <div className="p-3.5 rounded-xl border border-line bg-surface/50">
+                          <span className="text-dim block mb-1">COMPLIANCE &amp; DEVOPS</span>
+                          <span className="text-white">SARIF 2.1.0 Outputs<br />Turborepo / pnpm<br />Vitest Suites</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {devTab === 'vision' && (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-white tracking-tight">The Vision: Honest Sandbox Reporting</h3>
+                      <blockquote className="border-l-2 border-white pl-4 italic text-sm text-neutral-300 my-4 leading-relaxed">
+                        "The biggest flaw in current security wrappers is false confidence. An agent started outside a real kernel container is fully vulnerable. We must present honest, diagnostic telemetry to developers, indicating precisely where their systems are strong or weak."
+                      </blockquote>
+                      <p className="text-sm text-mute">
+                        Orvex is engineered with absolute respect for developer workflows: local-first execution, zero cloud telemetry, and complete programmatic embeddability.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-line/60 flex flex-wrap gap-4">
+                <a
+                  href="https://github.com/anshrajore"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full border border-line bg-surface px-5 py-2.5 text-xs font-mono text-mute hover:text-white hover:border-dim transition-all"
+                >
+                  $ cat ~/.profile/github.info
+                </a>
+                <a
+                  href="https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full bg-white px-5 py-2.5 text-xs font-mono text-black font-bold hover:bg-neutral-200 transition-all"
+                >
+                  $ git clone orvex-security
+                </a>
+              </div>
+            </div>
+
+            {/* Right side: Styled System Diagnostic Status Code block */}
+            <div className="lg:col-span-6 rounded-2xl border border-line bg-surface/40 p-6 flex flex-col justify-between">
+              <div className="font-mono text-xs text-neutral-300 space-y-3.5">
+                <div className="flex justify-between items-center pb-2 border-b border-line">
+                  <span className="text-dim uppercase text-[10px] tracking-wider">Ansh Rajore Specifications</span>
+                  <span className="h-2 w-2 rounded-full bg-white animate-pulse"></span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-dim">AUTHOR:</span>
+                  <span className="text-white font-bold">Ansh Rajore</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-dim">STUDIO:</span>
+                  <span className="text-white">Dark Arcane</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-dim">LOCATION:</span>
+                  <span className="text-white">Nashik, MH, IN</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-dim">SPECIALTIES:</span>
+                  <span className="text-white text-right">Runtimes, Compilers, ML Ops</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-dim">FOCUS AREA:</span>
+                  <span className="text-white">Agent Capabilities Interception</span>
+                </div>
+                <div className="flex justify-between border-t border-line/60 pt-3">
+                  <span className="text-dim">NPM PROFILE:</span>
+                  <span className="text-white">anshdeveloper</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-dim">STATUS:</span>
+                  <span className="text-white font-semibold">ACTIVE DEV</span>
+                </div>
+              </div>
+
+              <div className="border-t border-line/60 pt-6 mt-6">
+                <div className="rounded-xl bg-black p-4 text-[11px] font-mono text-dim leading-relaxed">
+                  // System baseline verify completed. All diagnostics report ready. Local control plane bound securely to loopback address.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

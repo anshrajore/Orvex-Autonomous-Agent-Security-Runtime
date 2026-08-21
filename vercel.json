@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm --filter=@orvex/dashboard build",
+  "buildCommand": "pnpm --filter=@anshrajore/orvex-dashboard build",
   "outputDirectory": "apps/dashboard/dist",
   "framework": "vite",
   "rewrites": [

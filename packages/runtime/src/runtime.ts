@@ -10,7 +10,7 @@ import type {
   SecurityProfile,
   Session,
   SessionStatistics,
-} from '@orvex/core';
+} from '@anshrajore/orvex-core';
 import {
   classifyPath,
   filterEnvironment,
@@ -19,14 +19,14 @@ import {
   sha256,
   SECURITY_EVENT_TYPES,
   type SecurityEventType,
-} from '@orvex/core';
-import { AuditLogger } from '@orvex/audit';
-import { PromptInjectionDetector, Redactor } from '@orvex/detectors';
-import { analyzeGitArgs } from '@orvex/git';
-import { inspectMcpCall, type McpCall } from '@orvex/mcp';
-import { PolicyEngine, type PolicyRequest } from '@orvex/policy';
-import { BehaviorBaseline, RiskEngine } from '@orvex/risk';
-import { selectProvider, type Sandbox, type SandboxProvider } from '@orvex/sandbox';
+} from '@anshrajore/orvex-core';
+import { AuditLogger } from '@anshrajore/orvex-audit';
+import { PromptInjectionDetector, Redactor } from '@anshrajore/orvex-detectors';
+import { analyzeGitArgs } from '@anshrajore/orvex-git';
+import { inspectMcpCall, type McpCall } from '@anshrajore/orvex-mcp';
+import { PolicyEngine, type PolicyRequest } from '@anshrajore/orvex-policy';
+import { BehaviorBaseline, RiskEngine } from '@anshrajore/orvex-risk';
+import { selectProvider, type Sandbox, type SandboxProvider } from '@anshrajore/orvex-sandbox';
 import { ApprovalEngine } from './approval.js';
 import { isDangerousRm, parseCommand } from './command.js';
 import { combineDecision, type EvaluatedAction } from './decision.js';

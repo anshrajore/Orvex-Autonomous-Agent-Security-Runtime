@@ -1,5 +1,5 @@
 import { performance } from 'node:perf_hooks';
-import { PolicyDocumentSchema, PolicyEngine, applyProfile, policyHash } from '@orvex/policy';
+import { PolicyDocumentSchema, PolicyEngine, applyProfile, policyHash } from '@anshrajore/orvex-policy';
 
 const document = applyProfile('balanced', PolicyDocumentSchema.parse({}));
 const engine = new PolicyEngine(document, policyHash(document));

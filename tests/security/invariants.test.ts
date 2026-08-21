@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { isProtectedSecretPath } from '@orvex/core';
-import { inspectMcpCall } from '@orvex/mcp';
+import { isProtectedSecretPath } from '@anshrajore/orvex-core';
+import { inspectMcpCall } from '@anshrajore/orvex-mcp';
 
 describe('security properties', () => {
   it('treats env files as secrets', () => {

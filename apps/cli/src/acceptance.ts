@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { OrvexRuntime } from '@orvex/runtime';
+import type { OrvexRuntime } from '@anshrajore/orvex-runtime';
 
 export interface ScenarioResult {
   name: string;

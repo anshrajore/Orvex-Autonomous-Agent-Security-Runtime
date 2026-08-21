@@ -38,25 +38,25 @@ importers:
 
   apps/cli:
     dependencies:
-      '@orvex/agents':
+      '@anshrajore/orvex-agents':
         specifier: workspace:*
         version: link:../../packages/agents
-      '@orvex/audit':
+      '@anshrajore/orvex-audit':
         specifier: workspace:*
         version: link:../../packages/audit
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@orvex/detectors':
+      '@anshrajore/orvex-detectors':
         specifier: workspace:*
         version: link:../../packages/detectors
-      '@orvex/policy':
+      '@anshrajore/orvex-policy':
         specifier: workspace:*
         version: link:../../packages/policy
-      '@orvex/runtime':
+      '@anshrajore/orvex-runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
-      '@orvex/sandbox':
+      '@anshrajore/orvex-sandbox':
         specifier: workspace:*
         version: link:../../packages/sandbox
       commander:
@@ -115,7 +115,7 @@ importers:
 
   packages/agents:
     dependencies:
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -128,10 +128,10 @@ importers:
 
   packages/audit:
     dependencies:
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
-      '@orvex/detectors':
+      '@anshrajore/orvex-detectors':
         specifier: workspace:*
         version: link:../detectors
     devDependencies:
@@ -157,7 +157,7 @@ importers:
 
   packages/detectors:
     dependencies:
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -170,7 +170,7 @@ importers:
 
   packages/git:
     dependencies:
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -183,7 +183,7 @@ importers:
 
   packages/mcp:
     dependencies:
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -196,7 +196,7 @@ importers:
 
   packages/policy:
     dependencies:
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
       minimatch:
@@ -218,7 +218,7 @@ importers:
 
   packages/risk:
     dependencies:
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -231,28 +231,28 @@ importers:
 
   packages/runtime:
     dependencies:
-      '@orvex/audit':
+      '@anshrajore/orvex-audit':
         specifier: workspace:*
         version: link:../audit
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
-      '@orvex/detectors':
+      '@anshrajore/orvex-detectors':
         specifier: workspace:*
         version: link:../detectors
-      '@orvex/git':
+      '@anshrajore/orvex-git':
         specifier: workspace:*
         version: link:../git
-      '@orvex/mcp':
+      '@anshrajore/orvex-mcp':
         specifier: workspace:*
         version: link:../mcp
-      '@orvex/policy':
+      '@anshrajore/orvex-policy':
         specifier: workspace:*
         version: link:../policy
-      '@orvex/risk':
+      '@anshrajore/orvex-risk':
         specifier: workspace:*
         version: link:../risk
-      '@orvex/sandbox':
+      '@anshrajore/orvex-sandbox':
         specifier: workspace:*
         version: link:../sandbox
     devDependencies:
@@ -265,7 +265,7 @@ importers:
 
   packages/sandbox:
     dependencies:
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -278,19 +278,19 @@ importers:
 
   packages/sdk:
     dependencies:
-      '@orvex/audit':
+      '@anshrajore/orvex-audit':
         specifier: workspace:*
         version: link:../audit
-      '@orvex/core':
+      '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
-      '@orvex/policy':
+      '@anshrajore/orvex-policy':
         specifier: workspace:*
         version: link:../policy
-      '@orvex/risk':
+      '@anshrajore/orvex-risk':
         specifier: workspace:*
         version: link:../risk
-      '@orvex/runtime':
+      '@anshrajore/orvex-runtime':
         specifier: workspace:*
         version: link:../runtime
     devDependencies:

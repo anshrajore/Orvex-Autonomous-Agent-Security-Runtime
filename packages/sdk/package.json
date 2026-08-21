@@ -1,5 +1,5 @@
 {
-  "name": "@orvex/sdk",
+  "name": "@anshrajore/orvex-sdk",
   "version": "0.1.0",
   "description": "Developer SDK for Orvex — Embed autonomous AI agent security, zero-trust policy evaluation, and composite risk scoring into your applications.",
   "license": "Apache-2.0",
@@ -45,11 +45,11 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@orvex/audit": "workspace:*",
-    "@orvex/core": "workspace:*",
-    "@orvex/policy": "workspace:*",
-    "@orvex/risk": "workspace:*",
-    "@orvex/runtime": "workspace:*"
+    "@anshrajore/orvex-audit": "workspace:*",
+    "@anshrajore/orvex-core": "workspace:*",
+    "@anshrajore/orvex-policy": "workspace:*",
+    "@anshrajore/orvex-risk": "workspace:*",
+    "@anshrajore/orvex-runtime": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.2"

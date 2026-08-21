@@ -1,4 +1,4 @@
-import type { Actor, Capability, ExecutionContext, Resource } from '@orvex/core';
+import type { Actor, Capability, ExecutionContext, Resource } from '@anshrajore/orvex-core';
 import type { PolicyEngine, PolicyRequest } from './engine.js';
 
 export interface SimulationCase {

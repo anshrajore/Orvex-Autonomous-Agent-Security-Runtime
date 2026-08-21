@@ -81,6 +81,16 @@ export function Navbar({ currentView, onNavigate, onScrollTo }: NavbarProps) {
             </button>
             <button
               type="button"
+              onClick={() => {
+                onNavigate('product');
+                setTimeout(() => onScrollTo('architect'), 50);
+              }}
+              className="hover:text-white transition-colors"
+            >
+              Architect
+            </button>
+            <button
+              type="button"
               onClick={() => onNavigate('guide')}
               className={`hover:text-white transition-colors ${currentView === 'guide' ? 'text-white' : ''}`}
             >

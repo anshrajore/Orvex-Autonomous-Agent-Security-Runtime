@@ -20,7 +20,7 @@
 </p>
 
 ```bash
-npm install -g orvex
+npm install -g orvex-cli
 orvex init --profile balanced
 orvex run claude
 ```
@@ -167,7 +167,7 @@ orvex dashboard                       # Launch local web console (127.0.0.1:4173
 Integrate Orvex security checks directly into your agent frameworks:
 
 ```typescript
-import { Orvex } from '@orvex/sdk';
+import { Orvex } from '@anshrajore/orvex-sdk';
 
 const runtime = await new Orvex({
   policy: './.orvex.yml',

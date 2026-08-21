@@ -1,5 +1,5 @@
 {
-  "name": "orvex",
+  "name": "orvex-cli",
   "version": "0.1.0",
   "description": "Orvex — The autonomous AI agent security runtime. Local-first control plane for safe agent execution.",
   "license": "Apache-2.0",
@@ -45,13 +45,13 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@orvex/agents": "workspace:*",
-    "@orvex/audit": "workspace:*",
-    "@orvex/core": "workspace:*",
-    "@orvex/detectors": "workspace:*",
-    "@orvex/policy": "workspace:*",
-    "@orvex/runtime": "workspace:*",
-    "@orvex/sandbox": "workspace:*",
+    "@anshrajore/orvex-agents": "workspace:*",
+    "@anshrajore/orvex-audit": "workspace:*",
+    "@anshrajore/orvex-core": "workspace:*",
+    "@anshrajore/orvex-detectors": "workspace:*",
+    "@anshrajore/orvex-policy": "workspace:*",
+    "@anshrajore/orvex-runtime": "workspace:*",
+    "@anshrajore/orvex-sandbox": "workspace:*",
     "commander": "^12.1.0",
     "picocolors": "^1.1.1",
     "ws": "^8.18.0"

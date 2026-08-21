@@ -1,4 +1,4 @@
-import type { OrvexPlugin, PluginContext } from '@orvex/core';
+import type { OrvexPlugin, PluginContext } from '@anshrajore/orvex-core';
 
 export class PluginRegistry {
   private readonly plugins: OrvexPlugin[] = [];

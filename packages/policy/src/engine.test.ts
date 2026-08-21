@@ -3,7 +3,7 @@ import { PolicyDocumentSchema } from '../src/schema.js';
 import { applyProfile } from '../src/profiles.js';
 import { PolicyEngine, policyHash } from '../src/engine.js';
 import { pathMatches } from '../src/matchers.js';
-import type { ExecutionContext } from '@orvex/core';
+import type { ExecutionContext } from '@anshrajore/orvex-core';
 
 const cwd = process.cwd();
 

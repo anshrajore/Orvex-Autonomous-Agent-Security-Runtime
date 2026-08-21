@@ -23,7 +23,7 @@
     "test:security": "vitest run tests/security",
     "test:adversarial": "vitest run tests/adversarial",
     "benchmark": "tsx scripts/benchmark.ts",
-    "dev": "turbo run dev --filter=orvex --filter=@orvex/dashboard",
+    "dev": "turbo run dev --filter=orvex --filter=@anshrajore/orvex-dashboard",
     "orvex": "node apps/cli/dist/index.js"
   },
   "devDependencies": {

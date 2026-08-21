@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { generateId, type SandboxStrength } from '@orvex/core';
+import { generateId, type SandboxStrength } from '@anshrajore/orvex-core';
 
 export interface SandboxOptions {
   cwd: string;

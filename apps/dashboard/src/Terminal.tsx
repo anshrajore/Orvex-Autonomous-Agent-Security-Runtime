@@ -7,7 +7,7 @@ const SNIPPETS: Record<InstallTab, Record<OsTab, string[]>> = {
   npm: {
     unix: [
       '# Global installation via npm',
-      'npm install -g orvex',
+      'npm install -g orvex-cli',
       '',
       '# Initialise project policy and check sandbox strength',
       'orvex init --profile balanced',
@@ -18,7 +18,7 @@ const SNIPPETS: Record<InstallTab, Record<OsTab, string[]>> = {
     ],
     windows: [
       '# Install via npm on Windows',
-      'npm install -g orvex',
+      'npm install -g orvex-cli',
       'orvex init --profile balanced',
       'orvex doctor',
       'orvex run -- .\\my-agent.exe',
@@ -27,7 +27,7 @@ const SNIPPETS: Record<InstallTab, Record<OsTab, string[]>> = {
   pnpm: {
     unix: [
       '# Global installation with pnpm',
-      'pnpm add -g orvex',
+      'pnpm add -g orvex-cli',
       '',
       '# Initialise and validate zero-trust configuration',
       'orvex init --profile strict',
@@ -37,7 +37,7 @@ const SNIPPETS: Record<InstallTab, Record<OsTab, string[]>> = {
       'orvex run claude --approval-mode ask',
     ],
     windows: [
-      'pnpm add -g orvex',
+      'pnpm add -g orvex-cli',
       'orvex init --profile strict',
       'orvex doctor',
     ],
@@ -45,22 +45,22 @@ const SNIPPETS: Record<InstallTab, Record<OsTab, string[]>> = {
   yarn: {
     unix: [
       '# Global installation with yarn',
-      'yarn global add orvex',
+      'yarn global add orvex-cli',
       'orvex init',
       'orvex doctor',
     ],
     windows: [
-      'yarn global add orvex',
+      'yarn global add orvex-cli',
       'orvex init',
     ],
   },
   'one-liner': {
     unix: [
       '# Prefer package manager install to ensure cryptographic verification',
-      'npm install -g orvex && orvex doctor',
+      'npm install -g orvex-cli && orvex doctor',
     ],
     windows: [
-      'npm install -g orvex && orvex doctor',
+      'npm install -g orvex-cli && orvex doctor',
     ],
   },
 };

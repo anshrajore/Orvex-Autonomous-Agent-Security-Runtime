@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { parseCommand, isDangerousRm } from '@orvex/runtime';
-import { classifyPath, filterEnvironment } from '@orvex/core';
-import { PromptInjectionDetector, Redactor } from '@orvex/detectors';
+import { parseCommand, isDangerousRm } from '@anshrajore/orvex-runtime';
+import { classifyPath, filterEnvironment } from '@anshrajore/orvex-core';
+import { PromptInjectionDetector, Redactor } from '@anshrajore/orvex-detectors';
 
 describe('adversarial cases', () => {
   it('does not allow chained remote shells via spacing tricks', () => {
