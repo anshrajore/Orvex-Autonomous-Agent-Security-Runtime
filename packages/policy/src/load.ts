@@ -50,13 +50,16 @@ export function loadPolicy(options: LoadPolicyOptions = {}): {
   };
 }
 
-export function writeProjectPolicy(cwd: string): string {
+export function writeProjectPolicy(cwd: string, profile = 'balanced'): string {
   const target = path.join(cwd, '.orvex.yml');
   if (!fs.existsSync(target)) {
+    const safe = ['relaxed', 'balanced', 'strict', 'paranoid', 'ci'].includes(profile)
+      ? profile
+      : 'balanced';
     fs.writeFileSync(
       target,
       `version: 1
-profile: balanced
+profile: ${safe}
 
 filesystem:
   default: deny
