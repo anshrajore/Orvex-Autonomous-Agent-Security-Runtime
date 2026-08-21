@@ -1,6 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Orvex mark">
-  <title>Orvex</title>
-  <rect width="64" height="64" rx="14" fill="#000"/>
-  <path d="M32 8 52 19.5v25L32 56 12 44.5v-25L32 8Z" fill="none" stroke="#FF5A3C" stroke-width="2.4"/>
-  <path d="M32 18v28M22 28h20M22 36h20" fill="none" stroke="#FF5A3C" stroke-width="2" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Orvex Mark">
+  <title>ORVEX — Developed by Ansh Rajore</title>
+  <rect width="64" height="64" rx="14" fill="#000000"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="13.25" fill="none" stroke="#222222" stroke-width="1.5"/>
+  
+  <!-- Precision B&W Hexagonal Security Shield -->
+  <path d="M32 9L52 19.5V44.5L32 55L12 44.5V19.5L32 9Z" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M32 17V47M20 25.5H44M20 38.5H44" fill="none" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round" stroke-opacity="0.85"/>
+  <circle cx="32" cy="32" r="2.5" fill="#FFFFFF"/>
 </svg>
