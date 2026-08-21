@@ -15,6 +15,7 @@ import {
   classifyPath,
   filterEnvironment,
   generateId,
+  isSensitiveEnvName,
   nowIso,
   sha256,
   SECURITY_EVENT_TYPES,
@@ -25,7 +26,7 @@ import { PromptInjectionDetector, Redactor } from '@anshrajore/orvex-detectors';
 import { analyzeGitArgs } from '@anshrajore/orvex-git';
 import { inspectMcpCall, type McpCall } from '@anshrajore/orvex-mcp';
 import { PolicyEngine, type PolicyRequest } from '@anshrajore/orvex-policy';
-import { BehaviorBaseline, RiskEngine } from '@anshrajore/orvex-risk';
+import { BehaviorBaseline, RiskEngine, type RiskInput } from '@anshrajore/orvex-risk';
 import { selectProvider, type Sandbox, type SandboxProvider } from '@anshrajore/orvex-sandbox';
 import { ApprovalEngine } from './approval.js';
 import { isDangerousRm, parseCommand } from './command.js';
@@ -109,7 +110,10 @@ export class OrvexRuntime {
   }
 
   filteredEnv(): Record<string, string> {
-    return { ...this.context.env, ORVEX_SESSION: this.session.id };
+    return sanitizeSpawnEnvironment(
+      { ...this.context.env, ORVEX_SESSION: this.session.id },
+      this.options.envPolicy?.allow ?? [],
+    );
   }
 
   async evaluate(request: PolicyRequest): Promise<EvaluatedAction> {
@@ -120,7 +124,7 @@ export class OrvexRuntime {
       request.action.capability === 'process.execute'
         ? parseCommand(request.resource.value)
         : undefined;
-    const risk = this.risk.assess({
+    const riskInput: RiskInput = {
       capability: request.action.capability,
       resource: request.resource,
       context: request.context,
@@ -131,19 +135,27 @@ export class OrvexRuntime {
             destructive: graph.destructive || (graph ? isDangerousRm(graph) : false),
             pipesToInterpreter: graph.pipesToInterpreter,
             privileged: graph.privileged,
+            obfuscated: graph.obfuscated,
+            nestedSubshells: graph.nestedSubshells,
+            background: graph.background,
+            dangerousNetworkTool: graph.dangerousNetworkTool,
+            reverseShell: graph.reverseShell,
+            suspiciousScript: graph.inspectedScripts.some((script) => script.suspicious),
           }
         : undefined,
       policyHint: policy.riskScore,
       anomalyBoost,
       promptInjection: request.context.provenance?.trustZone === 'UNTRUSTED' && policy.riskScore > 40,
-    });
+      observe: false,
+    };
+    const risk = this.risk.assess(riskInput);
     let evaluated = combineDecision(policy, risk);
-    if (graph?.remoteShell || (graph && isDangerousRm(graph))) {
+    if (graph?.remoteShell || graph?.reverseShell || (graph && isDangerousRm(graph))) {
       evaluated = {
         ...evaluated,
         decision: 'deny',
         sideEffectAllowed: false,
-        reason: graph.remoteShell
+        reason: graph.remoteShell || graph.reverseShell
           ? 'Remote code execution via piped interpreter is blocked.'
           : 'Recursive delete of a dangerous target is blocked.',
       };
@@ -195,6 +207,7 @@ export class OrvexRuntime {
       evaluated = { ...evaluated, sideEffectAllowed: false, reason: `${evaluated.reason} Dry-run: not executed.` };
     }
     this.baseline.observe(request.action.capability, prefix);
+    if (evaluated.sideEffectAllowed) this.risk.observe(riskInput);
     const eventType: SecurityEventType = SECURITY_EVENT_TYPES.includes(
       request.action.type as SecurityEventType,
     )
@@ -398,4 +411,20 @@ function bumpStats(stats: SessionStatistics, event: AuditEvent): void {
   if (event.action.startsWith('NETWORK')) stats.network += 1;
   if (event.action.includes('SECRET') && event.decision === 'deny') stats.secretsBlocked += 1;
   if (event.action.startsWith('MCP')) stats.mcpCalls += 1;
+}
+
+function sanitizeSpawnEnvironment(env: Record<string, string>, explicitAllow: string[]): Record<string, string> {
+  const result: Record<string, string> = {};
+  for (const [key, value] of Object.entries(env)) {
+    if (isSensitiveEnvName(key) && !explicitAllow.some((pattern) => envNameMatches(key, pattern))) {
+      continue;
+    }
+    result[key] = value;
+  }
+  return result;
+}
+
+function envNameMatches(name: string, pattern: string): boolean {
+  const escaped = pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+  return new RegExp(`^${escaped}$`, 'i').test(name);
 }
