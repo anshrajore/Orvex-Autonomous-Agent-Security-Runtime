@@ -182,7 +182,7 @@ function subshellDepth(raw: string): number {
 
 function hasSplitBinary(raw: string): boolean {
   const compact = raw.replace(/['"\\\s]/g, '').toLowerCase();
-  return ['curl', 'wget', 'bash', 'sh', 'python', 'node', 'nc', 'socat'].some(
+  return ['curl', 'wget', 'bash', 'python', 'node', 'socat'].some(
     (binary) => compact.includes(binary) && !new RegExp(`\\b${binary}\\b`, 'i').test(raw),
   );
 }

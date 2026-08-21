@@ -21,4 +21,4 @@ Without bubblewrap, Orvex will not pretend namespaces are active.
 
 ## Windows notes
 
-No equivalent provider ships in 0.1.0. Doctor reports WEAK fallback. Contributions for Job Objects / AppContainers should implement `SandboxProvider` honestly.
+No equivalent provider ships in 0.2.0. Doctor reports WEAK fallback. Contributions for Job Objects / AppContainers should implement `SandboxProvider` honestly.

