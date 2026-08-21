@@ -5,8 +5,15 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
-  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -17,5 +24,37 @@
     "@anshrajore/orvex-core": "workspace:*",
     "@anshrajore/orvex-detectors": "workspace:*"
   },
-  "devDependencies": { "typescript": "^5.7.2", "vitest": "^2.1.8" }
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "author": {
+    "name": "Ansh Rajore",
+    "email": "anshrajore@gmail.com",
+    "url": "https://github.com/anshrajore"
+  },
+  "contributors": [
+    {
+      "name": "Ansh Rajore",
+      "email": "anshrajore@gmail.com",
+      "url": "https://github.com/anshrajore",
+      "role": "Creator, Lead Architect & Principal Engineer"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Ansh Rajore",
+      "email": "anshrajore@gmail.com",
+      "url": "https://github.com/anshrajore"
+    }
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/anshrajore"
+  },
+  "homepage": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime#readme",
+  "bugs": {
+    "url": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime/issues",
+    "email": "anshrajore@gmail.com"
+  }
 }

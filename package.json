@@ -5,7 +5,11 @@
   "version": "0.1.0",
   "description": "Orvex — the security runtime for autonomous AI agents.",
   "license": "Apache-2.0",
-  "author": "Ansh Rajore",
+  "author": {
+    "name": "Ansh Rajore",
+    "email": "anshrajore@gmail.com",
+    "url": "https://github.com/anshrajore"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime.git"
@@ -36,5 +40,29 @@
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.1",
     "vitest": "^2.1.8"
+  },
+  "contributors": [
+    {
+      "name": "Ansh Rajore",
+      "email": "anshrajore@gmail.com",
+      "url": "https://github.com/anshrajore",
+      "role": "Creator, Lead Architect & Principal Engineer"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Ansh Rajore",
+      "email": "anshrajore@gmail.com",
+      "url": "https://github.com/anshrajore"
+    }
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/anshrajore"
+  },
+  "homepage": "https://orvex-security-runtime.vercel.app",
+  "bugs": {
+    "url": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime/issues",
+    "email": "anshrajore@gmail.com"
   }
 }
