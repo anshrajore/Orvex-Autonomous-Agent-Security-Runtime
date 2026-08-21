@@ -1,0 +1,11 @@
+export { PolicyDocumentSchema } from './schema.js';
+export type { PolicyDocument } from './schema.js';
+export { PolicyEngine, policyHash } from './engine.js';
+export type { PolicyRequest } from './engine.js';
+export { loadPolicy, parsePolicyYaml, writeProjectPolicy } from './load.js';
+export { applyProfile, profileAskBecomesDeny } from './profiles.js';
+export { validatePolicy } from './validate.js';
+export type { ValidationResult } from './validate.js';
+export { simulate, DEFAULT_SIMULATION } from './simulate.js';
+export type { SimulationCase } from './simulate.js';
+export { pathMatches, hostMatches, parseHostRule } from './matchers.js';

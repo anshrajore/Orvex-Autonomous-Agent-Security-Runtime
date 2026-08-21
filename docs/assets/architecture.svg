@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 420" role="img" aria-label="Orvex architecture">
+  <title>Orvex control plane</title>
+  <rect width="1120" height="420" rx="16" fill="#000"/>
+  <rect x="1" y="1" width="1118" height="418" rx="16" fill="none" stroke="#1F1F1F"/>
+  <text x="40" y="48" fill="#FF5A3C" font-family="IBM Plex Sans, sans-serif" font-size="12" letter-spacing="3">CONTROL PLANE</text>
+  <g font-family="IBM Plex Sans, sans-serif" font-size="15" text-anchor="middle">
+    <rect x="40" y="80" width="160" height="56" rx="8" fill="#0A0A0A" stroke="#FF5A3C"/>
+    <text x="120" y="114" fill="#fff">Agent</text>
+    <rect x="248" y="80" width="160" height="56" rx="8" fill="#0A0A0A" stroke="#3A3A3A"/>
+    <text x="328" y="114" fill="#fff">Orvex runtime</text>
+    <rect x="456" y="80" width="160" height="56" rx="8" fill="#0A0A0A" stroke="#3A3A3A"/>
+    <text x="536" y="114" fill="#fff">Policy</text>
+    <rect x="664" y="80" width="160" height="56" rx="8" fill="#0A0A0A" stroke="#3A3A3A"/>
+    <text x="744" y="114" fill="#fff">Risk</text>
+    <rect x="872" y="80" width="208" height="56" rx="8" fill="#0A0A0A" stroke="#3A3A3A"/>
+    <text x="976" y="114" fill="#fff">Decision</text>
+    <path d="M200 108h48M408 108h48M616 108h48M824 108h48" stroke="#FF5A3C" stroke-width="2"/>
+    <rect x="40" y="200" width="240" height="56" rx="8" fill="#0A0A0A" stroke="#3A3A3A"/>
+    <text x="160" y="234" fill="#fff">Filesystem</text>
+    <rect x="312" y="200" width="240" height="56" rx="8" fill="#0A0A0A" stroke="#3A3A3A"/>
+    <text x="432" y="234" fill="#fff">Process / Git</text>
+    <rect x="584" y="200" width="240" height="56" rx="8" fill="#0A0A0A" stroke="#3A3A3A"/>
+    <text x="704" y="234" fill="#fff">Network / MCP</text>
+    <rect x="856" y="200" width="224" height="56" rx="8" fill="#0A0A0A" stroke="#3A3A3A"/>
+    <text x="968" y="234" fill="#fff">Secrets</text>
+    <rect x="40" y="320" width="1040" height="56" rx="8" fill="#0A0A0A" stroke="#FF5A3C"/>
+    <text x="560" y="354" fill="#fff">Operating system  ·  sandbox backend  ·  local audit</text>
+  </g>
+</svg>
