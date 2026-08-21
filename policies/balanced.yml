@@ -1,0 +1,40 @@
+version: 1
+profile: balanced
+
+filesystem:
+  default: deny
+  read:
+    allow:
+      - ./**
+  write:
+    allow:
+      - ./src/**
+      - ./tests/**
+  delete:
+    default: deny
+
+process:
+  default: deny
+  allow:
+    - node
+    - npm
+    - pnpm
+    - git
+
+network:
+  default: deny
+  allow:
+    - github.com
+    - api.github.com
+    - registry.npmjs.org
+
+secrets:
+  default: deny
+
+mcp:
+  default: deny
+
+git:
+  protectedBranches:
+    - main
+    - production

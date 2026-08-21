@@ -1,0 +1,40 @@
+{
+  "name": "orvex-monorepo",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Orvex — the security runtime for autonomous AI agents.",
+  "license": "Apache-2.0",
+  "author": "Ansh Rajore",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime.git"
+  },
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "eslint packages apps/cli --ignore-pattern dist",
+    "test": "vitest run",
+    "test:integration": "vitest run tests/integration",
+    "test:security": "vitest run tests/security",
+    "test:adversarial": "vitest run tests/adversarial",
+    "benchmark": "tsx scripts/benchmark.ts",
+    "dev": "turbo run dev --filter=orvex --filter=@orvex/dashboard",
+    "orvex": "node apps/cli/dist/index.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.2",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1",
+    "vitest": "^2.1.8"
+  }
+}

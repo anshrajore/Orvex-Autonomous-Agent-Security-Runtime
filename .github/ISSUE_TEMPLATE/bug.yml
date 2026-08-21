@@ -1,0 +1,15 @@
+name: Bug
+description: Defect in Orvex runtime or CLI
+body:
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+    validations:
+      required: true

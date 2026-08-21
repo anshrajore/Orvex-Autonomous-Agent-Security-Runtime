@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 480" role="img" aria-label="Orvex banner">
+  <title>ORVEX  The security runtime for autonomous AI agents</title>
+  <defs>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#141414"/>
+      <stop offset="100%" stop-color="#000"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#1F1F1F" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="480" fill="url(#fade)"/>
+  <rect width="1280" height="480" fill="url(#grid)" opacity="0.7"/>
+  <rect x="0" y="0" width="1280" height="4" fill="#FF5A3C"/>
+  <g transform="translate(88 128)">
+    <path d="M48 8 88 30v44L48 96 8 74V30L48 8Z" fill="none" stroke="#FF5A3C" stroke-width="3"/>
+    <path d="M48 28v40M32 44h32M32 60h32" fill="none" stroke="#FF5A3C" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <text x="220" y="188" fill="#FFFFFF" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="72" font-weight="600" letter-spacing="-2">ORVEX</text>
+  <text x="224" y="232" fill="#FF5A3C" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="500" letter-spacing="4">AUTONOMOUS AGENT SECURITY RUNTIME</text>
+  <text x="224" y="292" fill="#C8C8C8" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="26">Give AI agents power. Keep control.</text>
+  <text x="224" y="340" fill="#8A8A8A" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="18">Local-first policy · risk · approval · sandbox · audit</text>
+  <text x="224" y="400" fill="#8A8A8A" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="16">Developed by Ansh Rajore  ·  Dark Arcane  ·  Nashik</text>
+</svg>

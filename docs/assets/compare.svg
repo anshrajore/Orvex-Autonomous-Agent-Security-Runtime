@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 200" role="img" aria-label="Orvex vs raw agents">
+  <title>Why wrap the agent</title>
+  <rect width="1120" height="200" rx="16" fill="#000"/>
+  <rect x="1" y="1" width="1118" height="198" rx="16" fill="none" stroke="#1F1F1F"/>
+  <g font-family="IBM Plex Sans, sans-serif" font-size="16">
+    <text x="48" y="56" fill="#8A8A8A">Raw agent</text>
+    <text x="48" y="92" fill="#FFFFFF">Unrestricted shell, files, network, MCP</text>
+    <text x="48" y="152" fill="#FF5A3C">Orvex</text>
+    <text x="48" y="188" fill="#FFFFFF">Same agent  scoped capabilities, scored risk, local audit</text>
+  </g>
+</svg>

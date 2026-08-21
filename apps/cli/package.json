@@ -1,0 +1,34 @@
+{
+  "name": "orvex",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "author": "Ansh Rajore <https://github.com/anshrajore>",
+  "type": "module",
+  "bin": {
+    "orvex": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@orvex/agents": "workspace:*",
+    "@orvex/audit": "workspace:*",
+    "@orvex/core": "workspace:*",
+    "@orvex/detectors": "workspace:*",
+    "@orvex/policy": "workspace:*",
+    "@orvex/runtime": "workspace:*",
+    "@orvex/sandbox": "workspace:*",
+    "commander": "^12.1.0",
+    "picocolors": "^1.1.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

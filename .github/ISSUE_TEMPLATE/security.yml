@@ -1,0 +1,9 @@
+name: Security vulnerability
+description: Privately describe a bypass if this form is not confidential — prefer private reporting
+body:
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+    validations:
+      required: true

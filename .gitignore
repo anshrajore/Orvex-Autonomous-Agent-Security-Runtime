@@ -1,0 +1,15 @@
+node_modules
+dist
+.turbo
+.cache
+coverage
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+.orvex-local
+apps/dashboard/dist
+*.tsbuildinfo
+/important
+/src/
