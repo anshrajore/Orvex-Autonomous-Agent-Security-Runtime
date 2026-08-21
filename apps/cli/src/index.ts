@@ -4,6 +4,7 @@ import http from 'node:http';
 import path from 'node:path';
 import process from 'node:process';
 import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
 import pc from 'picocolors';
 import { WebSocketServer } from 'ws';
@@ -25,6 +26,7 @@ import { banner, sessionPanel } from './ui.js';
 
 const program = new Command();
 const require = createRequire(import.meta.url);
+const here = path.dirname(fileURLToPath(import.meta.url));
 
 function fail(code: number, message: string, json = false): never {
   if (json) process.stdout.write(`${JSON.stringify({ error: message, code })}\n`);
@@ -77,8 +79,9 @@ program
 program
   .command('init')
   .description('Create .orvex.yml in the current directory')
-  .action(() => {
-    const file = writeProjectPolicy(process.cwd());
+  .option('--profile <profile>', 'relaxed|balanced|strict|paranoid|ci', 'balanced')
+  .action((opts: { profile: string }) => {
+    const file = writeProjectPolicy(process.cwd(), opts.profile);
     process.stdout.write(`${banner()}\nCreated ${file}\n`);
   });
 
@@ -461,7 +464,7 @@ program.command('ci').action(async () => {
 program.command('dashboard').action(async () => {
   const host = '127.0.0.1';
   const port = 4173;
-  const dashboardDir = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../dashboard/dist');
+  const dashboardDir = path.resolve(here, '../../dashboard/dist');
   const server = http.createServer((req, res) => {
     const url = req.url ?? '/';
     if (url.startsWith('/api/events')) {
