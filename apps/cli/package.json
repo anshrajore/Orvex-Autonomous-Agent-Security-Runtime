@@ -1,6 +1,6 @@
 {
   "name": "orvex-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Orvex — The autonomous AI agent security runtime. Local-first control plane for safe agent execution.",
   "license": "Apache-2.0",
   "author": {

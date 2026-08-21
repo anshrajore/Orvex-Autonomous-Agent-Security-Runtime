@@ -34,6 +34,47 @@ function fail(code: number, message: string, json = false): never {
   process.exit(code);
 }
 
+function formatEvaluation(input: {
+  target: string;
+  decision: string;
+  sideEffectAllowed: boolean;
+  reason: string;
+  risk: { score: number; level: string; factors: Array<{ id: string; category: string; contribution: number; explanation: string }> };
+  json?: boolean;
+}): string {
+  if (input.json) {
+    return `${JSON.stringify(
+      {
+        target: input.target,
+        decision: input.decision,
+        sideEffectAllowed: input.sideEffectAllowed,
+        reason: input.reason,
+        risk: input.risk,
+      },
+      null,
+      2,
+    )}\n`;
+  }
+  const factors = input.risk.factors
+    .sort((a, b) => b.contribution - a.contribution)
+    .slice(0, 8)
+    .map((factor) => `  - ${factor.id} [${factor.category}] +${factor.contribution}: ${factor.explanation}`);
+  return [
+    `Target: ${input.target}`,
+    `Decision: ${input.decision.toUpperCase()}`,
+    `Side effects: ${input.sideEffectAllowed ? 'allowed' : 'blocked'}`,
+    `Risk: ${input.risk.score}/100 (${input.risk.level})`,
+    `Reason: ${input.reason}`,
+    factors.length ? 'Top factors:' : 'Top factors: none',
+    ...factors,
+    '',
+  ].join('\n');
+}
+
+function commandFromArgs(args: string[]): string {
+  return args.join(' ').trim();
+}
+
 program
   .name('orvex')
   .description('ORVEX — Autonomous Agent Security Runtime')
@@ -141,6 +182,127 @@ program
       })}\n`,
     );
     process.exit(failed.length ? EXIT_CODES.POLICY_VIOLATION : EXIT_CODES.SUCCESS);
+  });
+
+program
+  .command('simulate')
+  .description('Evaluate a command, file, network target, or prompt without side effects')
+  .argument('<target...>', 'Target to evaluate')
+  .option('--kind <kind>', 'command|file-read|file-write|file-delete|network|prompt', 'command')
+  .option('--profile <profile>', 'relaxed|balanced|strict|paranoid|ci', 'balanced')
+  .option('--approval-mode <mode>', 'auto|ask|strict|balanced', 'balanced')
+  .action(async (targetArgs: string[], opts: {
+    kind: string;
+    profile: SecurityProfile;
+    approvalMode: ApprovalMode;
+  }) => {
+    const target = commandFromArgs(targetArgs);
+    const loaded = loadPolicy({ cwd: process.cwd(), profileOverride: opts.profile });
+    const runtime = new OrvexRuntime({
+      policy: loaded.engine,
+      cwd: process.cwd(),
+      agentId: 'simulator',
+      profile: loaded.document.profile,
+      approvalMode: opts.approvalMode,
+      dryRun: true,
+      interactive: false,
+      preserveAsk: true,
+    });
+    const json = Boolean(program.opts<{ json?: boolean }>().json);
+
+    if (opts.kind === 'prompt') {
+      const result = runtime.scanUntrustedText(target, 'simulate');
+      runtime.end();
+      if (json) {
+        process.stdout.write(`${JSON.stringify({ target, decision: result.escalate ? 'ask' : 'allow', promptInjectionScore: result.score }, null, 2)}\n`);
+      } else {
+        process.stdout.write(`Prompt injection: ${result.escalate ? 'ESCALATE' : 'clear'}\nScore: ${result.score}/100\n`);
+      }
+      process.exit(result.escalate ? EXIT_CODES.POLICY_VIOLATION : EXIT_CODES.SUCCESS);
+    }
+
+    const evaluated =
+      opts.kind === 'file-read'
+        ? await runtime.evaluateFile('read', target)
+        : opts.kind === 'file-write'
+          ? await runtime.evaluateFile('write', target)
+          : opts.kind === 'file-delete'
+            ? await runtime.evaluateFile('delete', target)
+            : opts.kind === 'network'
+              ? await runtime.evaluateNetwork(target)
+              : await runtime.evaluateCommand(target);
+    runtime.end();
+
+    process.stdout.write(
+      formatEvaluation({
+        target,
+        decision: evaluated.decision,
+        sideEffectAllowed: evaluated.sideEffectAllowed,
+        reason: evaluated.reason,
+        risk: evaluated.risk,
+        json,
+      }),
+    );
+    process.exit(evaluated.decision === 'deny' ? EXIT_CODES.BLOCKED_ACTION : EXIT_CODES.SUCCESS);
+  });
+
+program
+  .command('exec')
+  .description('Evaluate and execute a command only when Orvex allows it')
+  .argument('<command...>', 'Command and arguments to execute')
+  .option('--dry-run', 'Evaluate without executing')
+  .option('--profile <profile>', 'relaxed|balanced|strict|paranoid|ci', 'balanced')
+  .option('--approval-mode <mode>', 'auto|ask|strict|balanced', 'balanced')
+  .allowUnknownOption(true)
+  .action(async (commandArgs: string[], opts: {
+    dryRun?: boolean;
+    profile: SecurityProfile;
+    approvalMode: ApprovalMode;
+  }) => {
+    const dash = process.argv.indexOf('--');
+    const args = dash >= 0 ? process.argv.slice(dash + 1) : commandArgs;
+    const commandText = commandFromArgs(args);
+    if (!commandText) fail(EXIT_CODES.CONFIGURATION_ERROR, 'Usage: orvex exec -- <command> [args...]');
+
+    const loaded = loadPolicy({ cwd: process.cwd(), profileOverride: opts.profile });
+    const runtime = new OrvexRuntime({
+      policy: loaded.engine,
+      cwd: process.cwd(),
+      agentId: 'exec',
+      profile: loaded.document.profile,
+      approvalMode: opts.approvalMode,
+      dryRun: opts.dryRun,
+      interactive: Boolean(process.stdin.isTTY) && loaded.document.profile !== 'ci',
+      preserveAsk: Boolean(opts.dryRun),
+    });
+    const evaluated = await runtime.evaluateCommand(commandText);
+    const json = Boolean(program.opts<{ json?: boolean }>().json);
+    process.stdout.write(
+      formatEvaluation({
+        target: commandText,
+        decision: evaluated.decision,
+        sideEffectAllowed: evaluated.sideEffectAllowed,
+        reason: evaluated.reason,
+        risk: evaluated.risk,
+        json,
+      }),
+    );
+
+    if (!evaluated.sideEffectAllowed || opts.dryRun) {
+      runtime.end();
+      process.exit(evaluated.sideEffectAllowed || opts.dryRun ? EXIT_CODES.SUCCESS : EXIT_CODES.BLOCKED_ACTION);
+    }
+
+    await runtime.initSandbox();
+    const registry = new AgentRegistry();
+    const prepared = await registry.get('generic').prepare({
+      cwd: process.cwd(),
+      args,
+      env: runtime.filteredEnv(),
+    });
+    const code = await spawnPrepared(prepared);
+    runtime.end();
+    process.exit(code);
   });
 
 program

@@ -113,7 +113,7 @@ export function Console({
               <p className="text-mute text-[11px] leading-relaxed">
                 Telemetry is never sent to external servers. All session logs persist in ~/.orvex/audit.
               </p>
-              <div className="text-white font-mono text-[10px] pt-1">v0.1.0 · Dark Arcane</div>
+              <div className="text-white font-mono text-[10px] pt-1">v0.2.0 · Dark Arcane</div>
             </div>
           </div>
         </aside>
