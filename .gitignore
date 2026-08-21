@@ -13,3 +13,4 @@ apps/dashboard/dist
 *.tsbuildinfo
 /important
 /src/
+.vercel

@@ -8,18 +8,18 @@ import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
 import pc from 'picocolors';
 import { WebSocketServer } from 'ws';
-import { AgentRegistry, spawnPrepared } from '@orvex/agents';
-import { AuditLogger } from '@orvex/audit';
+import { AgentRegistry, spawnPrepared } from '@anshrajore/orvex-agents';
+import { AuditLogger } from '@anshrajore/orvex-audit';
 import {
   EXIT_CODES,
   orvexPaths,
   type ApprovalMode,
   type SecurityProfile,
-} from '@orvex/core';
-import { SecretDetector } from '@orvex/detectors';
-import { loadPolicy, simulate, validatePolicy, writeProjectPolicy } from '@orvex/policy';
-import { OrvexRuntime } from '@orvex/runtime';
-import { selectProvider } from '@orvex/sandbox';
+} from '@anshrajore/orvex-core';
+import { SecretDetector } from '@anshrajore/orvex-detectors';
+import { loadPolicy, simulate, validatePolicy, writeProjectPolicy } from '@anshrajore/orvex-policy';
+import { OrvexRuntime } from '@anshrajore/orvex-runtime';
+import { selectProvider } from '@anshrajore/orvex-sandbox';
 import { runAcceptance } from './acceptance.js';
 import { doctor } from './doctor.js';
 import { banner, sessionPanel } from './ui.js';
@@ -490,7 +490,7 @@ program.command('dashboard').action(async () => {
         return;
       }
       res.writeHead(404);
-      res.end('Dashboard assets not built. Run pnpm --filter @orvex/dashboard build');
+      res.end('Dashboard assets not built. Run pnpm --filter @anshrajore/orvex-dashboard build');
       return;
     }
     const ext = path.extname(target);

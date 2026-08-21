@@ -1,5 +1,5 @@
 {
-  "name": "@orvex/mcp",
+  "name": "@anshrajore/orvex-mcp",
   "version": "0.1.0",
   "license": "Apache-2.0",
   "type": "module",
@@ -13,6 +13,6 @@
     "test": "vitest run",
     "lint": "eslint src"
   },
-  "dependencies": { "@orvex/core": "workspace:*" },
+  "dependencies": { "@anshrajore/orvex-core": "workspace:*" },
   "devDependencies": { "typescript": "^5.7.2", "vitest": "^2.1.8" }
 }

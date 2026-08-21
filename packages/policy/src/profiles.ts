@@ -1,4 +1,4 @@
-import type { Decision, SecurityProfile } from '@orvex/core';
+import type { Decision, SecurityProfile } from '@anshrajore/orvex-core';
 import type { PolicyDocument } from './schema.js';
 
 const PROFILE_DEFAULTS: Record<SecurityProfile, Partial<PolicyDocument>> = {

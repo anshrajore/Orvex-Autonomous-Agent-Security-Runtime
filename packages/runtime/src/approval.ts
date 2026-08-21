@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
-import type { ApprovalMode, Decision } from '@orvex/core';
+import type { ApprovalMode, Decision } from '@anshrajore/orvex-core';
 import type { EvaluatedAction } from './decision.js';
 
 export type ApprovalChoice = 'deny' | 'once' | 'session';

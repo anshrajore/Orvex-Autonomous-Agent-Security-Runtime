@@ -5,8 +5,8 @@ import type {
   RiskAssessment,
   RiskFactor,
   TrustZone,
-} from '@orvex/core';
-import { clampScore, riskLevelFromScore } from '@orvex/core';
+} from '@anshrajore/orvex-core';
+import { clampScore, riskLevelFromScore } from '@anshrajore/orvex-core';
 
 export interface RiskInput {
   capability: Capability;

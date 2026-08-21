@@ -1,4 +1,4 @@
-import type { Decision, PolicyDecision, RiskAssessment } from '@orvex/core';
+import type { Decision, PolicyDecision, RiskAssessment } from '@anshrajore/orvex-core';
 
 export type FinalDecision = Decision;
 

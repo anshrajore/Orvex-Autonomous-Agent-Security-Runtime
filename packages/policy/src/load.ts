@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parse } from 'yaml';
-import { projectPolicyPath, userConfigPath } from '@orvex/core';
+import { projectPolicyPath, userConfigPath } from '@anshrajore/orvex-core';
 import { PolicyDocumentSchema, type PolicyDocument } from './schema.js';
 import { applyProfile } from './profiles.js';
 import { PolicyEngine, policyHash } from './engine.js';

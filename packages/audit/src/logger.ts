@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { orvexPaths, type AuditEvent, type Session } from '@orvex/core';
-import { Redactor } from '@orvex/detectors';
+import { orvexPaths, type AuditEvent, type Session } from '@anshrajore/orvex-core';
+import { Redactor } from '@anshrajore/orvex-detectors';
 
 export class AuditLogger {
   private readonly redactor = new Redactor();

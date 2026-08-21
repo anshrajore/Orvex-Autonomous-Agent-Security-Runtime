@@ -7,8 +7,8 @@ import type {
   Resource,
   Action,
   Rule,
-} from '@orvex/core';
-import { classifyPath, isProtectedSecretPath, normalizePathInput, sha256 } from '@orvex/core';
+} from '@anshrajore/orvex-core';
+import { classifyPath, isProtectedSecretPath, normalizePathInput, sha256 } from '@anshrajore/orvex-core';
 import type { PolicyDocument } from './schema.js';
 import { hostMatches, pathMatches } from './matchers.js';
 import { profileAskBecomesDeny } from './profiles.js';

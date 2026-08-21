@@ -1,4 +1,4 @@
-import type { Capability } from '@orvex/core';
+import type { Capability } from '@anshrajore/orvex-core';
 
 export interface GitAnalysis {
   capability: Capability;

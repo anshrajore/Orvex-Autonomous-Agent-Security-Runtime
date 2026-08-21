@@ -94,7 +94,7 @@ export function Guide() {
                   <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Installation</h3>
                   <div className="rounded-xl border border-line bg-black p-4 font-mono text-xs text-neutral-300">
                     <p className="text-dim"># Install the CLI globally</p>
-                    <p className="text-white font-bold mt-1">npm install -g orvex</p>
+                    <p className="text-white font-bold mt-1">npm install -g orvex-cli</p>
                     <p className="text-dim mt-4"># Or install locally in your project</p>
                     <p className="text-white font-bold mt-1">pnpm add -D orvex</p>
                   </div>
@@ -325,8 +325,8 @@ export function Guide() {
                 </p>
                 <div className="rounded-xl border border-line bg-black p-4 font-mono text-xs text-neutral-300 leading-relaxed overflow-x-auto">
                   <p className="text-dim">// Install via npm or pnpm</p>
-                  <p className="text-dim">// pnpm add @orvex/sdk</p>
-                  <p className="text-white font-bold mt-2">import &#123; Orvex &#125; from '@orvex/sdk';</p>
+                  <p className="text-dim">// pnpm add @anshrajore/orvex-sdk</p>
+                  <p className="text-white font-bold mt-2">import &#123; Orvex &#125; from '@anshrajore/orvex-sdk';</p>
                   <br />
                   <p><span className="text-neutral-400">const</span> runtime = <span className="text-neutral-400">await new</span> <span className="text-white">Orvex</span>(&#123;</p>
                   <p className="pl-4">policy: <span className="text-neutral-400">'./.orvex.yml'</span>,</p>

@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { Capability } from '@orvex/core';
+import type { Capability } from '@anshrajore/orvex-core';
 
 export interface AgentContext {
   cwd: string;

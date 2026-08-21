@@ -1,5 +1,5 @@
 {
-  "name": "@orvex/audit",
+  "name": "@anshrajore/orvex-audit",
   "version": "0.1.0",
   "license": "Apache-2.0",
   "type": "module",
@@ -14,8 +14,8 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@orvex/core": "workspace:*",
-    "@orvex/detectors": "workspace:*"
+    "@anshrajore/orvex-core": "workspace:*",
+    "@anshrajore/orvex-detectors": "workspace:*"
   },
   "devDependencies": { "typescript": "^5.7.2", "vitest": "^2.1.8" }
 }

@@ -1,4 +1,4 @@
-import type { ApprovalMode } from '@orvex/core';
+import type { ApprovalMode } from '@anshrajore/orvex-core';
 import type { EvaluatedAction } from './decision.js';
 
 export type { EvaluatedAction };

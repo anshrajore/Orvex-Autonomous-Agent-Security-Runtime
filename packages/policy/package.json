@@ -1,5 +1,5 @@
 {
-  "name": "@orvex/policy",
+  "name": "@anshrajore/orvex-policy",
   "version": "0.1.0",
   "license": "Apache-2.0",
   "type": "module",
@@ -19,7 +19,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@orvex/core": "workspace:*",
+    "@anshrajore/orvex-core": "workspace:*",
     "minimatch": "^10.0.1",
     "yaml": "^2.6.1",
     "zod": "^3.24.2"

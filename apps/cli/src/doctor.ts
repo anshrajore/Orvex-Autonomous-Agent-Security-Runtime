@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { EXIT_CODES, orvexPaths } from '@orvex/core';
-import { loadPolicy } from '@orvex/policy';
-import { selectProvider } from '@orvex/sandbox';
+import { EXIT_CODES, orvexPaths } from '@anshrajore/orvex-core';
+import { loadPolicy } from '@anshrajore/orvex-policy';
+import { selectProvider } from '@anshrajore/orvex-sandbox';
 
 export async function doctor(): Promise<{ lines: string[]; strength: string; code: number }> {
   const lines: string[] = ['ORVEX DOCTOR', ''];

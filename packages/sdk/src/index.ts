@@ -1,7 +1,7 @@
-import { loadPolicy, PolicyEngine } from '@orvex/policy';
-import { RiskEngine } from '@orvex/risk';
-import { AuditLogger } from '@orvex/audit';
-import { OrvexRuntime } from '@orvex/runtime';
+import { loadPolicy, PolicyEngine } from '@anshrajore/orvex-policy';
+import { RiskEngine } from '@anshrajore/orvex-risk';
+import { AuditLogger } from '@anshrajore/orvex-audit';
+import { OrvexRuntime } from '@anshrajore/orvex-runtime';
 
 export { PolicyEngine, RiskEngine, AuditLogger, OrvexRuntime };
 

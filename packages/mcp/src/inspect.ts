@@ -1,4 +1,4 @@
-import { classifyPath, type McpTrust } from '@orvex/core';
+import { classifyPath, type McpTrust } from '@anshrajore/orvex-core';
 
 export interface McpCall {
   server: string;

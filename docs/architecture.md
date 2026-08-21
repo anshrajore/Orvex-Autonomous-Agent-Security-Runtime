@@ -26,13 +26,13 @@ Normalized `SecurityEvent` records are the internal currency. Adapters parse ven
 
 Package map:
 
-- `@orvex/core` — types, path classification, env filter
-- `@orvex/policy` — YAML policy, profiles, simulation
-- `@orvex/risk` — scoring + optional baseline
-- `@orvex/runtime` — session, approval, commands, checkpoints
-- `@orvex/sandbox` — bubblewrap, sandbox-exec, docker, fallback
-- `@orvex/agents` — adapters
-- `@orvex/detectors` — secrets + prompt-injection heuristics
-- `@orvex/mcp` `@orvex/git` `@orvex/audit`
-- `@orvex/sdk` — programmatic entry
-- `orvex` CLI and `@orvex/dashboard`
+- `@anshrajore/orvex-core` — types, path classification, env filter
+- `@anshrajore/orvex-policy` — YAML policy, profiles, simulation
+- `@anshrajore/orvex-risk` — scoring + optional baseline
+- `@anshrajore/orvex-runtime` — session, approval, commands, checkpoints
+- `@anshrajore/orvex-sandbox` — bubblewrap, sandbox-exec, docker, fallback
+- `@anshrajore/orvex-agents` — adapters
+- `@anshrajore/orvex-detectors` — secrets + prompt-injection heuristics
+- `@anshrajore/orvex-mcp` `@anshrajore/orvex-git` `@anshrajore/orvex-audit`
+- `@anshrajore/orvex-sdk` — programmatic entry
+- `orvex` CLI and `@anshrajore/orvex-dashboard`

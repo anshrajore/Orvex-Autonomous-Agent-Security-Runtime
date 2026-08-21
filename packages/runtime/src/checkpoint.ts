@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { generateId, orvexPaths, sha256 } from '@orvex/core';
+import { generateId, orvexPaths, sha256 } from '@anshrajore/orvex-core';
 
 interface CheckpointMeta {
   id: string;

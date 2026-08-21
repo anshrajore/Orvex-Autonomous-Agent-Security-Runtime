@@ -2,10 +2,10 @@ import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { PolicyDocumentSchema } from '@orvex/policy';
-import { applyProfile } from '@orvex/policy';
-import { PolicyEngine, policyHash } from '@orvex/policy';
-import { OrvexRuntime } from '@orvex/runtime';
+import { PolicyDocumentSchema } from '@anshrajore/orvex-policy';
+import { applyProfile } from '@anshrajore/orvex-policy';
+import { PolicyEngine, policyHash } from '@anshrajore/orvex-policy';
+import { OrvexRuntime } from '@anshrajore/orvex-runtime';
 
 describe('acceptance scenarios', () => {
   it('matches the required decision matrix without side effects on blocks', async () => {

@@ -1,5 +1,5 @@
 {
-  "name": "@orvex/runtime",
+  "name": "@anshrajore/orvex-runtime",
   "version": "0.1.0",
   "license": "Apache-2.0",
   "type": "module",
@@ -14,14 +14,14 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@orvex/audit": "workspace:*",
-    "@orvex/core": "workspace:*",
-    "@orvex/detectors": "workspace:*",
-    "@orvex/git": "workspace:*",
-    "@orvex/mcp": "workspace:*",
-    "@orvex/policy": "workspace:*",
-    "@orvex/risk": "workspace:*",
-    "@orvex/sandbox": "workspace:*"
+    "@anshrajore/orvex-audit": "workspace:*",
+    "@anshrajore/orvex-core": "workspace:*",
+    "@anshrajore/orvex-detectors": "workspace:*",
+    "@anshrajore/orvex-git": "workspace:*",
+    "@anshrajore/orvex-mcp": "workspace:*",
+    "@anshrajore/orvex-policy": "workspace:*",
+    "@anshrajore/orvex-risk": "workspace:*",
+    "@anshrajore/orvex-sandbox": "workspace:*"
   },
   "devDependencies": { "typescript": "^5.7.2", "vitest": "^2.1.8" }
 }
