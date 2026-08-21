@@ -3,14 +3,19 @@
   "version": "0.1.0",
   "description": "Orvex — The autonomous AI agent security runtime. Local-first control plane for safe agent execution.",
   "license": "Apache-2.0",
-  "author": "Ansh Rajore <https://github.com/anshrajore>",
+  "author": {
+    "name": "Ansh Rajore",
+    "email": "anshrajore@gmail.com",
+    "url": "https://github.com/anshrajore"
+  },
   "homepage": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime.git"
   },
   "bugs": {
-    "url": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime/issues"
+    "url": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime/issues",
+    "email": "anshrajore@gmail.com"
   },
   "keywords": [
     "ai-agent",
@@ -60,5 +65,24 @@
     "@types/ws": "^8.5.13",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
+  },
+  "contributors": [
+    {
+      "name": "Ansh Rajore",
+      "email": "anshrajore@gmail.com",
+      "url": "https://github.com/anshrajore",
+      "role": "Creator, Lead Architect & Principal Engineer"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Ansh Rajore",
+      "email": "anshrajore@gmail.com",
+      "url": "https://github.com/anshrajore"
+    }
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/anshrajore"
   }
 }
