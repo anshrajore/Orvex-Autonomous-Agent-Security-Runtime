@@ -1,14 +1,44 @@
 {
   "name": "orvex",
   "version": "0.1.0",
+  "description": "Orvex — The autonomous AI agent security runtime. Local-first control plane for safe agent execution.",
   "license": "Apache-2.0",
   "author": "Ansh Rajore <https://github.com/anshrajore>",
+  "homepage": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime/issues"
+  },
+  "keywords": [
+    "ai-agent",
+    "security",
+    "agentic-security",
+    "sandbox",
+    "zero-trust",
+    "policy-engine",
+    "autonomous-agents",
+    "mcp",
+    "sarif",
+    "flight-recorder",
+    "claude-code",
+    "openclaw"
+  ],
   "type": "module",
   "bin": {
     "orvex": "./dist/index.js"
   },
   "main": "./dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",

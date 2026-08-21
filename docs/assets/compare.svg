@@ -1,11 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 200" role="img" aria-label="Orvex vs raw agents">
-  <title>Why wrap the agent</title>
-  <rect width="1120" height="200" rx="16" fill="#000"/>
-  <rect x="1" y="1" width="1118" height="198" rx="16" fill="none" stroke="#1F1F1F"/>
-  <g font-family="IBM Plex Sans, sans-serif" font-size="16">
-    <text x="48" y="56" fill="#8A8A8A">Raw agent</text>
-    <text x="48" y="92" fill="#FFFFFF">Unrestricted shell, files, network, MCP</text>
-    <text x="48" y="152" fill="#FF5A3C">Orvex</text>
-    <text x="48" y="188" fill="#FFFFFF">Same agent  scoped capabilities, scored risk, local audit</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 200" role="img" aria-label="Orvex vs Raw Agents">
+  <title>Raw Agent vs Orvex Protected Runtime</title>
+  <rect width="1120" height="200" rx="16" fill="#000000"/>
+  <rect x="1" y="1" width="1118" height="198" rx="15" fill="none" stroke="#222222" stroke-width="2"/>
+  
+  <g font-family="Inter, -apple-system, sans-serif" font-size="15">
+    <text x="48" y="52" fill="#666666" font-family="IBM Plex Mono" font-size="12" letter-spacing="1">RAW AUTONOMOUS AGENT (UNPROTECTED)</text>
+    <text x="48" y="84" fill="#888888">Unrestricted access to ~/.ssh, credentials, root commands, unknown network endpoints, destructive git.</text>
+    
+    <line x1="48" y1="110" x2="1072" y2="110" stroke="#1A1A1A" stroke-width="1"/>
+
+    <text x="48" y="145" fill="#FFFFFF" font-family="IBM Plex Mono" font-size="12" letter-spacing="1" font-weight="600">ORVEX RUNTIME (ISOLATED &amp; GOVERNED)</text>
+    <text x="48" y="176" fill="#FFFFFF">Scoped capability bounds · Composite risk scoring · Secret redaction · Sandbox containment · SARIF flight recorder.</text>
   </g>
 </svg>

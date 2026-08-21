@@ -1,12 +1,43 @@
 {
   "name": "@orvex/sdk",
   "version": "0.1.0",
+  "description": "Developer SDK for Orvex — Embed autonomous AI agent security, zero-trust policy evaluation, and composite risk scoring into your applications.",
   "license": "Apache-2.0",
+  "author": "Ansh Rajore <https://github.com/anshrajore>",
+  "homepage": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime/issues"
+  },
+  "keywords": [
+    "orvex",
+    "ai-agent-sdk",
+    "agent-security",
+    "policy-engine",
+    "risk-scoring",
+    "mcp-security",
+    "sandbox"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
-  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -20,5 +51,7 @@
     "@orvex/risk": "workspace:*",
     "@orvex/runtime": "workspace:*"
   },
-  "devDependencies": { "typescript": "^5.7.2" }
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
 }

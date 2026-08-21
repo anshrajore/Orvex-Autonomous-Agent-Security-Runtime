@@ -1,24 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 480" role="img" aria-label="Orvex banner">
-  <title>ORVEX  The security runtime for autonomous AI agents</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-label="Orvex Banner">
+  <title>ORVEX - Autonomous Agent Security Runtime</title>
   <defs>
-    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#141414"/>
-      <stop offset="100%" stop-color="#000"/>
-    </linearGradient>
-    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-      <path d="M32 0H0V32" fill="none" stroke="#1F1F1F" stroke-width="1"/>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#141414" stroke-width="1"/>
     </pattern>
   </defs>
-  <rect width="1280" height="480" fill="url(#fade)"/>
-  <rect width="1280" height="480" fill="url(#grid)" opacity="0.7"/>
-  <rect x="0" y="0" width="1280" height="4" fill="#FF5A3C"/>
-  <g transform="translate(88 128)">
-    <path d="M48 8 88 30v44L48 96 8 74V30L48 8Z" fill="none" stroke="#FF5A3C" stroke-width="3"/>
-    <path d="M48 28v40M32 44h32M32 60h32" fill="none" stroke="#FF5A3C" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <rect width="1200" height="360" rx="16" fill="#000000"/>
+  <rect width="1200" height="360" rx="16" fill="url(#grid)"/>
+  <rect x="1" y="1" width="1198" height="358" rx="15" fill="none" stroke="#222222" stroke-width="2"/>
+
+  <!-- Logo Mark centered top -->
+  <g transform="translate(568, 45)">
+    <rect width="64" height="64" rx="14" fill="#0A0A0A" stroke="#333333" stroke-width="1.5"/>
+    <path d="M32 9L52 19.5V44.5L32 55L12 44.5V19.5L32 9Z" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M32 17V47M20 25.5H44M20 38.5H44" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="32" cy="32" r="2" fill="#FFFFFF"/>
   </g>
-  <text x="220" y="188" fill="#FFFFFF" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="72" font-weight="600" letter-spacing="-2">ORVEX</text>
-  <text x="224" y="232" fill="#FF5A3C" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="500" letter-spacing="4">AUTONOMOUS AGENT SECURITY RUNTIME</text>
-  <text x="224" y="292" fill="#C8C8C8" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="26">Give AI agents power. Keep control.</text>
-  <text x="224" y="340" fill="#8A8A8A" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="18">Local-first policy · risk · approval · sandbox · audit</text>
-  <text x="224" y="400" fill="#8A8A8A" font-family="IBM Plex Sans, ui-sans-serif, system-ui, sans-serif" font-size="16">Developed by Ansh Rajore  ·  Dark Arcane  ·  Nashik</text>
+
+  <!-- Typography in pure white and gray -->
+  <g font-family="Inter, -apple-system, sans-serif" text-anchor="middle">
+    <text x="600" y="165" fill="#FFFFFF" font-size="44" font-weight="800" letter-spacing="-1.5">ORVEX</text>
+    <text x="600" y="205" fill="#CCCCCC" font-size="18" font-weight="500" letter-spacing="0">The Security Runtime for Autonomous AI Agents</text>
+    <text x="600" y="240" fill="#777777" font-size="13" font-weight="400">Zero-Trust Policy Engine | Composite Risk Scoring | Kernel Sandboxing | Flight Recorder</text>
+    
+    <rect x="475" y="275" width="250" height="30" rx="15" fill="#0A0A0A" stroke="#222222"/>
+    <text x="600" y="295" fill="#888888" font-size="11" font-family="IBM Plex Mono, monospace" letter-spacing="1">DEVELOPED BY ANSH RAJORE</text>
+  </g>
 </svg>
