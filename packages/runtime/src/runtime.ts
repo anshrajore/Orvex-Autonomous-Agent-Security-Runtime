@@ -1,3 +1,4 @@
+// Advanced AI firewall runtime context orchestration
 import type {
   ApprovalMode,
   AuditEvent,
