@@ -1,3 +1,5 @@
+import { PromptInjectionDetector } from '@anshrajore/orvex-detectors';
+
 export interface CommandNode {
   binary: string;
   args: string[];
@@ -105,6 +107,23 @@ function splitSegments(tokens: Token[]): Token[][] {
 }
 
 export function parseCommand(raw: string): CommandGraph {
+  // Dynamic pipeline base64 script inspector
+  let pipelineDecodedInjection = false;
+  if (raw.includes('|') && raw.includes('base64')) {
+    const base64Match = /\b[A-Za-z0-9+/]{24,}=*\b/.exec(raw);
+    if (base64Match) {
+      try {
+        const decoded = Buffer.from(base64Match[0], 'base64').toString('utf8');
+        const scanRes = new PromptInjectionDetector().scan(decoded, 'UNTRUSTED');
+        if (scanRes.escalate) {
+          pipelineDecodedInjection = true;
+        }
+      } catch {
+        // Ignore decoding errors
+      }
+    }
+  }
+
   const tokens = tokenize(raw);
   const tokenValues = tokens.map((t) => t.value);
   const pipes = tokenValues.includes('|');
@@ -138,7 +157,7 @@ export function parseCommand(raw: string): CommandGraph {
   const binaries = nodes.map((n) => n.binary.split(/[\\/]/).pop() ?? n.binary);
   const pipesToInterpreter = pipes && nodes.some((n, i) => i > 0 && INTERPRETERS.has(pathBase(n.binary)));
   const remoteFetch = binaries.some((b) => b === 'curl' || b === 'wget');
-  const remoteShell = (pipesToInterpreter && remoteFetch) || raw.includes('/dev/tcp/');
+  const remoteShell = (pipesToInterpreter && remoteFetch) || raw.includes('/dev/tcp/') || pipelineDecodedInjection;
   const destructive = binaries.some((b) => DESTRUCTIVE.has(b));
   const privileged = binaries.some((b) => PRIVILEGED.has(b));
   const force = nodes.some((n) => n.args.includes('-f') || n.args.includes('--force') || n.args.includes('-rf') || n.args.includes('-fr'));
@@ -171,7 +190,7 @@ export function parseCommand(raw: string): CommandGraph {
     force,
     targetPaths,
     background,
-    obfuscated: commandObfuscated,
+    obfuscated: commandObfuscated || pipelineDecodedInjection,
     evasionTool,
   };
 }
