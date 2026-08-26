@@ -18,10 +18,15 @@ export interface RiskInput {
     destructive?: boolean;
     pipesToInterpreter?: boolean;
     privileged?: boolean;
+    background?: boolean;
+    evasionTool?: boolean;
+    obfuscated?: boolean;
   };
   policyHint?: number;
   anomalyBoost?: number;
   promptInjection?: boolean;
+  secretsAccessedInSession?: boolean;
+  actionFrequencyBurst?: boolean;
 }
 
 const CAP_BASE: Record<string, number> = {
@@ -79,6 +84,16 @@ export class RiskEngine {
     if (sem?.destructive) add('destructive', 'command', 35, 'Command is destructive.');
     if (sem?.force) add('force', 'command', 20, 'Command uses a force flag.');
     if (sem?.privileged) add('privileged', 'command', 40, 'Command requests elevated privileges.');
+    if (sem?.background) add('background-spawn', 'command', 25, 'Detached background execution detected.');
+    
+    if (sem?.obfuscated) {
+      add('command-obfuscation', 'command', 45, 'Obfuscation markers detected in command path.');
+      if (input.capability === 'process.execute') {
+        add('pipeline-obfuscation', 'command', 65, 'Obfuscated execution pipeline detected (base64/hex decode and pipe).');
+      }
+    }
+    
+    if (sem?.evasionTool) add('evasion-tool', 'command', 55, 'Evasion or network diagnostic tool run.');
 
     if (input.promptInjection) {
       add('prompt-injection', 'content', 35, 'Prompt-injection signals were detected.');
@@ -93,6 +108,19 @@ export class RiskEngine {
     }
     if (typeof input.policyHint === 'number') {
       add('policy-hint', 'policy', Math.round(input.policyHint * 0.15), 'Policy engine risk hint.');
+    }
+
+    // Dynamic co-occurrence risk boosts
+    if (input.secretsAccessedInSession) {
+      if (input.capability === 'network.connect' || input.capability === 'dns.resolve') {
+        add('secret-exfiltration-threat', 'cooccurrence', 85, 'Outbound connection requested after accessing secrets.');
+      } else if (input.capability === 'process.execute') {
+        add('leaky-subprocess', 'cooccurrence', 50, 'Process spawned after accessing secrets.');
+      }
+    }
+
+    if (input.actionFrequencyBurst) {
+      add('frequency-burst', 'behavior', 35, 'Rapid action sequence burst matches scanning behavior.');
     }
 
     const host = input.resource.value;
