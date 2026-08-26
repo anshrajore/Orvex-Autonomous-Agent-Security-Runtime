@@ -462,7 +462,7 @@ export function Landing({
               Ansh Rajore
             </h2>
             <p className="text-base text-mute mt-3 max-w-lg mx-auto">
-              Sole architect, engineer, and maintainer of the entire Orvex ecosystem — 13 packages, 1 author.
+              Lead engineer and creator of the Orvex security control plane.
             </p>
           </div>
 
