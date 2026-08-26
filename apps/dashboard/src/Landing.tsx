@@ -670,7 +670,34 @@ export function Landing({
         </div>
       </section>
 
-      <Footer />
+      
+          {/* Real-time Threat Telemetry Chart */}
+          <div className="mt-16 max-w-5xl mx-auto rounded-2xl border border-line bg-surface/30 p-6 font-mono text-xs text-left">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-line">
+              <span className="text-white font-bold">// LIVE SYSTEM RISK TELEMETRY</span>
+              <span className="text-dim">UPDATE: 2s ago</span>
+            </div>
+            <div className="h-[120px] flex items-end gap-2 border-b border-line/40 pb-2">
+              <div className="bg-white/10 w-full h-[20%] rounded-t"></div>
+              <div className="bg-white/10 w-full h-[35%] rounded-t"></div>
+              <div className="bg-white/20 w-full h-[15%] rounded-t"></div>
+              <div className="bg-white/40 w-full h-[55%] rounded-t"></div>
+              <div className="bg-white/20 w-full h-[40%] rounded-t"></div>
+              <div className="bg-white/80 w-full h-[90%] rounded-t relative group">
+                <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-white text-black px-1.5 py-0.5 rounded text-[8px] font-bold">BLOCKED</span>
+              </div>
+              <div className="bg-white/10 w-full h-[25%] rounded-t"></div>
+              <div className="bg-white/20 w-full h-[30%] rounded-t"></div>
+            </div>
+            <div className="flex justify-between text-[9px] text-mute mt-2">
+              <span>08:00</span>
+              <span>08:15</span>
+              <span>08:30</span>
+              <span>08:45</span>
+              <span>09:00</span>
+            </div>
+          </div>
+<Footer />
     </div>
   );
 }
