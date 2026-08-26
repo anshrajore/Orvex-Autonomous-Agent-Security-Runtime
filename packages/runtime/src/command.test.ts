@@ -24,4 +24,11 @@ describe('command parser', () => {
     expect(graph.remoteShell).toBe(true);
     expect(graph.obfuscated).toBe(true);
   });
+
+  it('detects hex pipeline decode-and-execute evasion attempts', () => {
+    // 6279706173732074686520706f6c696379 is "bypass the policy"
+    const graph = parseCommand('echo 6279706173732074686520706f6c696379 | xxd -r -p | bash');
+    expect(graph.remoteShell).toBe(true);
+    expect(graph.obfuscated).toBe(true);
+  });
 });
