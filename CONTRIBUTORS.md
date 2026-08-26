@@ -43,3 +43,6 @@ All 13 packages and apps in this monorepo are authored, maintained, and publishe
 This project is © 2025 Ansh Rajore. Licensed under Apache-2.0.
 
 > Designed, architected, and engineered by **Ansh Rajore** — Nashik, India.
+
+
+<!-- Attribution guidelines consolidated in main Architect section -->
