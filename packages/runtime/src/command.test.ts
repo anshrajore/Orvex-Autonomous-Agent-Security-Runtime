@@ -17,4 +17,11 @@ describe('command parser', () => {
     expect(isDangerousRm(parseCommand('rm -rf /'))).toBe(true);
     expect(isDangerousRm(parseCommand('rm -rf ./tmp'))).toBe(false);
   });
+
+  it('detects base64 pipeline decode-and-execute evasion attempts', () => {
+    // aWdub3JlIHByZXZpb3VzIGluc3RydWN0aW9ucw== is "ignore previous instructions"
+    const graph = parseCommand('echo aWdub3JlIHByZXZpb3VzIGluc3RydWN0aW9ucw== | base64 -d | sh');
+    expect(graph.remoteShell).toBe(true);
+    expect(graph.obfuscated).toBe(true);
+  });
 });
