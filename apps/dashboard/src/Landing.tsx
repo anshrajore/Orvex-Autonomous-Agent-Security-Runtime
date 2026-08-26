@@ -445,7 +445,7 @@ export function Landing({
       </section>
 
       {/* Developer Credits Section — Enhanced */}
-      <section id="architect" className="py-28 border-t border-line bg-black relative overflow-hidden">
+      <section id="architect" className="py-20 border-t border-line bg-black relative overflow-hidden">
         {/* Background atmosphere */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(255,255,255,0.04),transparent_70%)] pointer-events-none" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
