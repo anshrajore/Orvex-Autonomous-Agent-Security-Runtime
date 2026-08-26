@@ -163,7 +163,7 @@ export function Landing({
             <div className="absolute inset-0 rounded-[100%] bg-gradient-to-t from-white/10 to-transparent blur-md"></div>
             <div className="absolute inset-1.5 rounded-[100%] border border-white/20 bg-black shadow-[0_0_80px_10px_rgba(255,255,255,0.15)] flex items-center justify-center">
               <div className="text-[10px] font-mono tracking-widest text-mute uppercase animate-pulse-subtle">
-                Control Plane Active
+                Control Plane Active · Real-time Stream Bound
               </div>
             </div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-2/3 border border-white/10 rounded-[100%]"></div>
