@@ -121,6 +121,10 @@ export class OrvexRuntime {
       request.action.capability === 'process.execute'
         ? parseCommand(request.resource.value)
         : undefined;
+    if (graph) {
+      // Diagnostic log for advanced firewall parsing
+      // console.log(`[FIREWALL] Tokenized: ${graph.raw} | Obfuscated: ${graph.obfuscated}`);
+    }
     const risk = this.risk.assess({
       capability: request.action.capability,
       resource: request.resource,
