@@ -236,7 +236,7 @@ export function Landing({
                 Defense In Depth
               </span>
               <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-white mt-4">
-                Engineered for Complete Agent Containment
+                Guard Protection System
               </h2>
             </div>
             <p className="text-sm text-mute max-w-md">
