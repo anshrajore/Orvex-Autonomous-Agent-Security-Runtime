@@ -87,13 +87,13 @@ export class RiskEngine {
     if (sem?.background) add('background-spawn', 'command', 25, 'Detached background execution detected.');
     
     if (sem?.obfuscated) {
-      add('command-obfuscation', 'command', 45, 'Obfuscation markers detected in command path.');
+      add('command-obfuscation', 'command', 50, 'Obfuscation markers detected in command path.');
       if (input.capability === 'process.execute') {
         add('pipeline-obfuscation', 'command', 65, 'Obfuscated execution pipeline detected (base64/hex decode and pipe).');
       }
     }
     
-    if (sem?.evasionTool) add('evasion-tool', 'command', 55, 'Evasion or network diagnostic tool run.');
+    if (sem?.evasionTool) add('evasion-tool', 'command', 60, 'Evasion or network diagnostic tool run.');
 
     if (input.promptInjection) {
       add('prompt-injection', 'content', 35, 'Prompt-injection signals were detected.');
