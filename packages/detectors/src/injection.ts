@@ -43,6 +43,11 @@ const SIGNALS: Array<{ id: string; re: RegExp; weight: number; explanation: stri
   },
 ];
 
+/**
+ * PromptInjectionDetector scans untrusted agent contexts and user inputs
+ * for jailbreak attempts, authority impersonation, exfiltration requests,
+ * and base64/hex obfuscated instruction injection payloads.
+ */
 export class PromptInjectionDetector {
   scan(text: string, trust: 'TRUSTED' | 'SEMI_TRUSTED' | 'UNTRUSTED' = 'UNTRUSTED'): {
     signals: InjectionSignal[];
