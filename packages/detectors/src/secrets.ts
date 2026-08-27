@@ -61,8 +61,11 @@ export class SecretVault {
   private readonly ids = new Map<string, string>();
 
   remember(type: string, hash: string): string {
+    const key = `${type}:${hash}`;
+    const existing = this.ids.get(key);
+    if (existing) return existing;
     const id = `secret_${this.ids.size + 1}`;
-    this.ids.set(hash, id);
+    this.ids.set(key, id);
     return id;
   }
 }

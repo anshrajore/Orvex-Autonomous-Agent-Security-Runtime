@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Redactor, SecretDetector } from '../src/secrets.js';
+import { Redactor, SecretDetector, SecretVault } from '../src/secrets.js';
 import { PromptInjectionDetector } from '../src/injection.js';
 
 describe('secret detector', () => {
@@ -22,6 +22,11 @@ describe('secret detector', () => {
     expect(new SecretDetector().scan(text).map((match) => match.type)).toEqual(
       expect.arrayContaining(['google_api_key', 'stripe_secret', 'npm_token', 'database_url']),
     );
+  });
+
+  it('returns stable vault identifiers for repeated hashes', () => {
+    const vault = new SecretVault();
+    expect(vault.remember('token', 'hash')).toBe(vault.remember('token', 'hash'));
   });
 });
 
