@@ -8,6 +8,9 @@ const PATTERNS: Array<{ type: string; re: RegExp }> = [
   { type: 'aws_access_key', re: /AKIA[0-9A-Z]{16}/g },
   { type: 'github_token', re: /ghp_[A-Za-z0-9]{20,}/g },
   { type: 'github_pat', re: /github_pat_[A-Za-z0-9_]{20,}/g },
+  { type: 'google_api_key', re: /AIza[0-9A-Za-z_-]{35}/g },
+  { type: 'stripe_secret', re: /sk_(?:live|test)_[0-9A-Za-z]{16,}/g },
+  { type: 'npm_token', re: /npm_[A-Za-z0-9]{20,}/g },
   { type: 'openai_key', re: /sk-[A-Za-z0-9]{20,}/g },
   { type: 'anthropic_key', re: /sk-ant-[A-Za-z0-9\-_]{20,}/g },
   { type: 'jwt', re: /eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g },
@@ -16,6 +19,7 @@ const PATTERNS: Array<{ type: string; re: RegExp }> = [
     re: /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/g,
   },
   { type: 'slack_token', re: /xox[baprs]-[A-Za-z0-9-]{10,}/g },
+  { type: 'database_url', re: /(?:postgres|mysql|mongodb(?:\+srv)?):\/\/[^\s'"`]+/gi },
   {
     type: 'generic_secret_assignment',
     re: /(?:api[_-]?key|secret|password|token)\s*[:=]\s*['"][^'"]{8,}['"]/gi,
