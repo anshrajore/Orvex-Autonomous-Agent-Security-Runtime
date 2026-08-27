@@ -183,11 +183,17 @@ export function parseCommand(raw: string): CommandGraph {
   });
 
   const binaries = nodes.map((n) => n.binary.split(/[\\/]/).pop() ?? n.binary);
+  const nestedGraphs = nodes
+    .filter((node) => INTERPRETERS.has(pathBase(node.binary)) && node.args[0] === '-c')
+    .map((node) => parseCommand(node.args.slice(1).join(' ')));
+  const nestedRemoteShell = nestedGraphs.some((graph) => graph.remoteShell);
+  const nestedDestructive = nestedGraphs.some((graph) => graph.destructive);
+  const nestedPrivileged = nestedGraphs.some((graph) => graph.privileged);
   const pipesToInterpreter = pipes && nodes.some((n, i) => i > 0 && INTERPRETERS.has(pathBase(n.binary)));
   const remoteFetch = binaries.some((b) => b === 'curl' || b === 'wget');
-  const remoteShell = (pipesToInterpreter && remoteFetch) || raw.includes('/dev/tcp/') || pipelineDecodedInjection || hexDecodedInjection;
-  const destructive = binaries.some((b) => DESTRUCTIVE.has(b));
-  const privileged = binaries.some((b) => PRIVILEGED.has(b));
+  const remoteShell = (pipesToInterpreter && remoteFetch) || nestedRemoteShell || raw.includes('/dev/tcp/') || pipelineDecodedInjection || hexDecodedInjection;
+  const destructive = binaries.some((b) => DESTRUCTIVE.has(b)) || nestedDestructive;
+  const privileged = binaries.some((b) => PRIVILEGED.has(b)) || nestedPrivileged;
   const force = nodes.some((n) => n.args.includes('-f') || n.args.includes('--force') || n.args.includes('-rf') || n.args.includes('-fr'));
 
   // Script and path parsing

