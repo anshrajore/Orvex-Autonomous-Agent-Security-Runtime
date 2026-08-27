@@ -81,10 +81,11 @@ export class PromptInjectionDetector {
     escalate: boolean;
   } {
     const signals: InjectionSignal[] = [];
+    const normalizedText = text.normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g, '');
 
     // 1. Direct scanning
     for (const signal of SIGNALS) {
-      if (signal.re.test(text)) {
+      if (signal.re.test(normalizedText)) {
         signals.push({
           id: signal.id,
           weight: signal.weight,
@@ -94,7 +95,7 @@ export class PromptInjectionDetector {
     }
 
     // 2. Base64 payload scanning
-    const base64Matches = text.match(/[A-Za-z0-9+/]{16,}=*/g) || [];
+    const base64Matches = normalizedText.match(/[A-Za-z0-9+/]{16,}=*/g) || [];
     for (const match of base64Matches) {
       try {
         const decoded = Buffer.from(match, 'base64').toString('utf8');
@@ -116,7 +117,7 @@ export class PromptInjectionDetector {
     }
 
     // 3. Hex payload scanning
-    const hexMatches = text.match(/[0-9a-fA-F]{24,}/g) || [];
+    const hexMatches = normalizedText.match(/[0-9a-fA-F]{24,}/g) || [];
     for (const match of hexMatches) {
       try {
         const decoded = Buffer.from(match, 'hex').toString('utf8');
