@@ -16,7 +16,7 @@ export interface ApprovalPrompt {
 }
 
 export class ApprovalEngine {
-  private readonly sessionAllows = new Set<string>();
+  private readonly sessionAllows = new Map<string, number>();
 
   constructor(private readonly mode: ApprovalMode) {}
 
@@ -24,12 +24,19 @@ export class ApprovalEngine {
     return `${action}::${resource}`;
   }
 
-  grantSession(action: string, resource: string): void {
-    this.sessionAllows.add(this.key(action, resource));
+  grantSession(action: string, resource: string, ttlMs = 30 * 60 * 1000): void {
+    this.sessionAllows.set(this.key(action, resource), Date.now() + ttlMs);
   }
 
   hasSessionGrant(action: string, resource: string): boolean {
-    return this.sessionAllows.has(this.key(action, resource));
+    const key = this.key(action, resource);
+    const expiresAt = this.sessionAllows.get(key);
+    if (!expiresAt) return false;
+    if (expiresAt <= Date.now()) {
+      this.sessionAllows.delete(key);
+      return false;
+    }
+    return true;
   }
 
   resolveNonInteractive(evaluated: EvaluatedAction): Decision {
