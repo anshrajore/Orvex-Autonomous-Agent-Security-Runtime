@@ -1,21 +1,31 @@
 import { minimatch } from 'minimatch';
+import fs from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
 
 export function pathMatches(pattern: string, target: string, cwd: string): boolean {
-  const absTarget = path.isAbsolute(target) ? path.normalize(target) : path.resolve(cwd, target);
-  const rel = path.relative(cwd, absTarget).split(path.sep).join('/');
+  const canonicalCwd = canonicalPath(cwd);
+  const absTarget = path.isAbsolute(target) ? path.normalize(target) : path.resolve(canonicalCwd, target);
+  const rel = path.relative(canonicalCwd, absTarget).split(path.sep).join('/');
   const patterns = [pattern, pattern.replace(/^\.\//, ''), `./${pattern.replace(/^\.\//, '')}`];
   for (const p of patterns) {
     if (minimatch(rel, p.replace(/^\.\//, ''), { dot: true, nocase: process.platform === 'win32' })) {
       return true;
     }
     if (minimatch(`./${rel}`, p, { dot: true })) return true;
-    const absPattern = path.isAbsolute(p) ? p : path.resolve(cwd, p);
+    const absPattern = path.isAbsolute(p) ? p : path.resolve(canonicalCwd, p);
     if (minimatch(absTarget, absPattern, { dot: true, nocase: process.platform === 'win32' })) return true;
   }
   if (pattern === './**' || pattern === '**' || pattern === './**/**') return !rel.startsWith('..');
   return false;
+}
+
+function canonicalPath(value: string): string {
+  try {
+    return fs.realpathSync.native(value);
+  } catch {
+    return path.normalize(value);
+  }
 }
 
 export function parseHostRule(rule: string): {
@@ -56,7 +66,7 @@ function ipv4CidrMatches(rule: string, host: string): boolean {
   if (!rule.includes('/') || net.isIP(host) !== 4) return false;
   const [base, bitsRaw] = rule.split('/');
   const bits = Number(bitsRaw);
-  if (net.isIP(base) !== 4 || !Number.isInteger(bits) || bits < 0 || bits > 32) return false;
+  if (!base || net.isIP(base) !== 4 || !Number.isInteger(bits) || bits < 0 || bits > 32) return false;
   const toInt = (value: string) => value.split('.').reduce((acc, part) => ((acc << 8) | Number(part)) >>> 0, 0);
   const mask = bits === 0 ? 0 : (~0 << (32 - bits)) >>> 0;
   return (toInt(host) & mask) === (toInt(base) & mask);
