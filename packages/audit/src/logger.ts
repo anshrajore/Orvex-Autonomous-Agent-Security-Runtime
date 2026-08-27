@@ -9,6 +9,8 @@ export class AuditLogger {
   constructor(private readonly root = orvexPaths()) {
     fs.mkdirSync(this.root.audit, { recursive: true });
     fs.mkdirSync(this.root.sessions, { recursive: true });
+    fs.chmodSync(this.root.audit, 0o700);
+    fs.chmodSync(this.root.sessions, 0o700);
   }
 
   append(event: AuditEvent): void {
