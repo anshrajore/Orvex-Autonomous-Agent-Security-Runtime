@@ -19,8 +19,10 @@ export class AuditLogger {
     };
     const file = path.join(this.root.audit, `${event.sessionId}.ndjson`);
     fs.appendFileSync(file, `${JSON.stringify(safe)}\n`, 'utf8');
+    fs.chmodSync(file, 0o600);
     const sessionFile = path.join(this.root.sessions, `${event.sessionId}.ndjson`);
     fs.appendFileSync(sessionFile, `${JSON.stringify(safe)}\n`, 'utf8');
+    fs.chmodSync(sessionFile, 0o600);
   }
 
   writeSession(session: Session): void {
@@ -30,6 +32,7 @@ export class AuditLogger {
       JSON.stringify(session, null, 2),
       'utf8',
     );
+    fs.chmodSync(path.join(this.root.sessions, `${session.id}.json`), 0o600);
   }
 
   listSessions(): Session[] {
