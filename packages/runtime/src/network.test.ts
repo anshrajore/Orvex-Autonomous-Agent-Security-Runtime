@@ -6,6 +6,9 @@ describe('network destination normalization', () => {
     expect(isSensitiveDestination('http://localhost:8080')).toBe(true);
     expect(isSensitiveDestination('https://[::1]:443')).toBe(true);
     expect(isSensitiveDestination('tcp://[::ffff:127.0.0.1]:80')).toBe(true);
+    expect(isSensitiveDestination('https://[fd00::10]:443')).toBe(true);
+    expect(isSensitiveDestination('https://[fe80::1]:443')).toBe(true);
+    expect(isSensitiveDestination('https://[::ffff:10.0.0.5]:443')).toBe(true);
     expect(isSensitiveDestination('169.254.169.254:80')).toBe(true);
   });
 

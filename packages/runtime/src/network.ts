@@ -24,6 +24,10 @@ export function isSensitiveDestination(host: string): boolean {
   if (BLOCKED_IPS.has(hostname) || hostname === 'metadata.google.internal') return true;
   if (hostname === 'localhost' || hostname === '::1' || hostname === '0:0:0:0:0:0:0:1') return true;
   if (hostname.startsWith('::ffff:127.')) return true;
+  if (/^(?:fc|fd)[0-9a-f]{2}:/i.test(hostname)) return true;
+  if (/^fe[89ab][0-9a-f]:/i.test(hostname)) return true;
+  if (hostname === '::' || hostname === '0:0:0:0:0:0:0:0') return true;
+  if (/^::ffff:(?:10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.)/i.test(hostname)) return true;
   if (PRIVATE.some((re) => re.test(hostname))) return true;
   return false;
 }
