@@ -31,4 +31,10 @@ describe('command parser', () => {
     expect(graph.remoteShell).toBe(true);
     expect(graph.obfuscated).toBe(true);
   });
+
+  it('normalizes environment assignments before the executable', () => {
+    const graph = parseCommand('NODE_OPTIONS=--inspect curl https://example.com');
+    expect(graph.nodes[0]?.binary).toBe('curl');
+    expect(graph.nodes[0]?.envAssignments).toEqual(['NODE_OPTIONS=--inspect']);
+  });
 });

@@ -4,6 +4,7 @@ export interface CommandNode {
   binary: string;
   args: string[];
   redirects: string[];
+  envAssignments: string[];
 }
 
 export interface CommandGraph {
@@ -152,12 +153,15 @@ export function parseCommand(raw: string): CommandGraph {
   const nodes: CommandNode[] = segments.map((seg) => {
     const redirects: string[] = [];
     const args: string[] = [];
+    const envAssignments: string[] = [];
     let binary = '';
     
     for (let i = 0; i < seg.length; i += 1) {
       const item = seg[i]!;
       if (item.value.startsWith('>') || item.value.startsWith('<')) {
         redirects.push(item.value);
+      } else if (!binary && isEnvironmentAssignment(item.value)) {
+        envAssignments.push(item.value);
       } else if (!binary) {
         binary = item.value;
         if (item.hasQuotes) {
@@ -168,7 +172,7 @@ export function parseCommand(raw: string): CommandGraph {
       }
     }
 
-    return { binary, args, redirects };
+    return { binary, args, redirects, envAssignments };
   });
 
   const binaries = nodes.map((n) => n.binary.split(/[\\/]/).pop() ?? n.binary);
@@ -210,6 +214,10 @@ export function parseCommand(raw: string): CommandGraph {
     obfuscated: commandObfuscated || pipelineDecodedInjection || hexDecodedInjection,
     evasionTool,
   };
+}
+
+function isEnvironmentAssignment(value: string): boolean {
+  return /^[A-Za-z_][A-Za-z0-9_]*=/.test(value);
 }
 
 function pathBase(binary: string): string {
