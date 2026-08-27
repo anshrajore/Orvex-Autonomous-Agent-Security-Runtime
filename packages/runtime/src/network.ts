@@ -7,12 +7,23 @@ const PRIVATE = [
   /^192\.168\./,
   /^172\.(1[6-9]|2[0-9]|3[0-1])\./,
   /^0\.0\.0\.0$/,
-  /^::1$/,
 ];
 
+function extractHostname(value: string): string {
+  const candidate = value.trim();
+  try {
+    const url = candidate.includes('://') ? new URL(candidate) : new URL(`tcp://${candidate}`);
+    return url.hostname.replace(/^\[|\]$/g, '').toLowerCase();
+  } catch {
+    return candidate.replace(/^\[|\]$/g, '').split('/')[0]?.split(':')[0]?.toLowerCase() ?? candidate.toLowerCase();
+  }
+}
+
 export function isSensitiveDestination(host: string): boolean {
-  const hostname = host.replace(/^[a-z]+:\/\//, '').split('/')[0]?.split(':')[0] ?? host;
+  const hostname = extractHostname(host);
   if (BLOCKED_IPS.has(hostname) || hostname === 'metadata.google.internal') return true;
+  if (hostname === 'localhost' || hostname === '::1' || hostname === '0:0:0:0:0:0:0:1') return true;
+  if (hostname.startsWith('::ffff:127.')) return true;
   if (PRIVATE.some((re) => re.test(hostname))) return true;
   return false;
 }
