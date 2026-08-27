@@ -11,6 +11,7 @@ export interface SandboxOptions {
   writePaths: string[];
   networkAllow: string[];
   maxMemoryMb?: number;
+  maxExecutionMinutes?: number;
 }
 
 export interface CommandRequest {
@@ -49,7 +50,7 @@ function which(bin: string): string | undefined {
   return undefined;
 }
 
-function run(argv: string[], options: { cwd?: string; env?: NodeJS.ProcessEnv }): Promise<CommandResult> {
+function run(argv: string[], options: { cwd?: string; env?: NodeJS.ProcessEnv; timeoutMs?: number }): Promise<CommandResult> {
   return new Promise((resolve, reject) => {
     const child = spawn(argv[0] ?? '', argv.slice(1), {
       cwd: options.cwd,
@@ -58,6 +59,11 @@ function run(argv: string[], options: { cwd?: string; env?: NodeJS.ProcessEnv })
     });
     let stdout = '';
     let stderr = '';
+    let timedOut = false;
+    const timer = options.timeoutMs ? setTimeout(() => {
+      timedOut = true;
+      child.kill('SIGTERM');
+    }, options.timeoutMs) : undefined;
     child.stdout?.on('data', (d) => {
       stdout += String(d);
     });
@@ -65,7 +71,10 @@ function run(argv: string[], options: { cwd?: string; env?: NodeJS.ProcessEnv })
       stderr += String(d);
     });
     child.on('error', reject);
-    child.on('close', (code) => resolve({ code: code ?? 1, stdout, stderr }));
+    child.on('close', (code) => {
+      if (timer) clearTimeout(timer);
+      resolve({ code: timedOut ? 124 : code ?? 1, stdout, stderr: timedOut ? `${stderr}Execution timed out.\n` : stderr });
+    });
   });
 }
 
@@ -96,6 +105,7 @@ export class FallbackProvider implements SandboxProvider {
     return run(request.argv, {
       cwd: request.cwd ?? options.cwd,
       env: { ...options.env, ...request.env },
+      timeoutMs: options.maxExecutionMinutes ? options.maxExecutionMinutes * 60_000 : undefined,
     });
   }
 
@@ -152,7 +162,10 @@ export class BubblewrapProvider implements SandboxProvider {
       request.cwd ?? options.cwd,
       ...request.argv,
     ];
-    return run(argv, { env: { ...options.env, ...request.env } });
+    return run(argv, {
+      env: { ...options.env, ...request.env },
+      timeoutMs: options.maxExecutionMinutes ? options.maxExecutionMinutes * 60_000 : undefined,
+    });
   }
 
   async destroy(sandboxId: string): Promise<void> {
@@ -201,6 +214,7 @@ ${networkRule}
     return run([bin, '-f', profilePath, ...request.argv], {
       cwd: request.cwd ?? options.cwd,
       env: { ...options.env, ...request.env },
+      timeoutMs: options.maxExecutionMinutes ? options.maxExecutionMinutes * 60_000 : undefined,
     });
   }
 
@@ -244,7 +258,7 @@ export class DockerProvider implements SandboxProvider {
       'node:22-alpine',
       ...request.argv,
     ];
-    return run(argv, { env: options.env });
+    return run(argv, { env: options.env, timeoutMs: options.maxExecutionMinutes ? options.maxExecutionMinutes * 60_000 : undefined });
   }
 
   async destroy(sandboxId: string): Promise<void> {

@@ -105,6 +105,7 @@ export class OrvexRuntime {
       readPaths: [this.options.cwd],
       writePaths: [this.options.cwd],
       networkAllow: this.options.policy.documentSnapshot().network.allow ?? [],
+      maxExecutionMinutes: this.options.policy.documentSnapshot().limits?.maxExecutionMinutes,
     });
     return this.sandboxProvider;
   }
