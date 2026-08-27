@@ -48,13 +48,28 @@ export class Redactor {
   ) {}
 
   redact(text: string): { text: string; count: number } {
-    const matches = this.detector.scan(text).sort((a, b) => b.start - a.start);
+    const matches = mergeOverlapping(this.detector.scan(text));
     let output = text;
     for (const match of matches) {
       output = output.slice(0, match.start) + this.replacement + output.slice(match.end);
     }
     return { text: output, count: matches.length };
   }
+}
+
+function mergeOverlapping(matches: SecretMatch[]): SecretMatch[] {
+  const ordered = [...matches].sort((a, b) => a.start - b.start || b.end - a.end);
+  const merged: SecretMatch[] = [];
+  for (const match of ordered) {
+    const previous = merged.at(-1);
+    if (previous && match.start <= previous.end) {
+      previous.end = Math.max(previous.end, match.end);
+      previous.type = `${previous.type}+${match.type}`;
+    } else {
+      merged.push({ ...match });
+    }
+  }
+  return merged.reverse();
 }
 
 export class SecretVault {

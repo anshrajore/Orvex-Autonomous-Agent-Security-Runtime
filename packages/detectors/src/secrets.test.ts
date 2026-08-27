@@ -28,6 +28,13 @@ describe('secret detector', () => {
     const vault = new SecretVault();
     expect(vault.remember('token', 'hash')).toBe(vault.remember('token', 'hash'));
   });
+
+  it('redacts overlapping provider patterns as one span', () => {
+    const value = 'sk-ant-api03-12345678901234567890';
+    const redacted = new Redactor().redact(value);
+    expect(redacted.count).toBe(1);
+    expect(redacted.text).toBe('[SECRET_REDACTED]');
+  });
 });
 
 describe('prompt injection', () => {
