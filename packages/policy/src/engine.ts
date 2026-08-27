@@ -8,7 +8,7 @@ import type {
   Action,
   Rule,
 } from '@anshrajore/orvex-core';
-import { classifyPath, isProtectedSecretPath, normalizePathInput, sha256 } from '@anshrajore/orvex-core';
+import { classifyPath, isProtectedSecretPath, resolvePathForPolicy, sha256 } from '@anshrajore/orvex-core';
 import type { PolicyDocument } from './schema.js';
 import { hostMatches, pathMatches } from './matchers.js';
 import { profileAskBecomesDeny } from './profiles.js';
@@ -76,7 +76,7 @@ export class PolicyEngine {
     rules: Rule[],
   ): PolicyDecision {
     const raw = resource.value;
-    const abs = normalizePathInput(raw, context.cwd);
+    const abs = resolvePathForPolicy(raw, context.cwd);
     const classification = classifyPath(abs, context.cwd);
     resource.classification = classification;
 
@@ -149,7 +149,7 @@ export class PolicyEngine {
     context: ExecutionContext,
     rules: Rule[],
   ): PolicyDecision {
-    const binary = resource.value.split(/\s+/)[0] ?? resource.value;
+    const binary = executableFromCommand(resource.value);
     const base = binary.split(/[\\/]/).pop()?.toLowerCase() ?? binary.toLowerCase();
     const proc = this.document.process;
     if (proc.deny?.some((name) => name.toLowerCase() === base)) {
@@ -336,4 +336,9 @@ export class PolicyEngine {
 
 export function policyHash(document: PolicyDocument): string {
   return sha256(JSON.stringify(document));
+}
+
+function executableFromCommand(command: string): string {
+  const tokens = command.trim().split(/\s+/);
+  return tokens.find((token) => !/^[A-Za-z_][A-Za-z0-9_]*=/.test(token)) ?? command;
 }

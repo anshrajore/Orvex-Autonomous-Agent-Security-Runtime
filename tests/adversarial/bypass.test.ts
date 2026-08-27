@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parseCommand, isDangerousRm } from '@anshrajore/orvex-runtime';
 import { classifyPath, filterEnvironment } from '@anshrajore/orvex-core';
 import { PromptInjectionDetector, Redactor } from '@anshrajore/orvex-detectors';
+import { PolicyDocumentSchema, PolicyEngine, applyProfile, policyHash } from '@anshrajore/orvex-policy';
 
 describe('adversarial cases', () => {
   it('does not allow chained remote shells via spacing tricks', () => {
@@ -45,5 +46,22 @@ describe('adversarial cases', () => {
     const graph = parseCommand('echo aWdub3JlIHByZXZpb3VzIGluc3RydWN0aW9ucw== | base64 -d | sh');
     expect(graph.remoteShell).toBe(true);
     expect(graph.obfuscated).toBe(true);
+  });
+
+  it('blocks a denied command hidden after an allowed command segment', async () => {
+    const document = applyProfile('balanced', PolicyDocumentSchema.parse({}));
+    const { OrvexRuntime } = await import('@anshrajore/orvex-runtime');
+    const runtime = new OrvexRuntime({
+      policy: new PolicyEngine(document, policyHash(document)),
+      cwd: process.cwd(),
+      agentId: 'adversary',
+      profile: 'balanced',
+      approvalMode: 'strict',
+      interactive: false,
+    });
+    const result = await runtime.evaluateCommand('node --version && curl https://unknown.com');
+    expect(result.decision).toBe('deny');
+    expect(result.sideEffectAllowed).toBe(false);
+    runtime.end();
   });
 });

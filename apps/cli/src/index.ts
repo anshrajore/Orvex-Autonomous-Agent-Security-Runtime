@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
 import pc from 'picocolors';
 import { WebSocketServer } from 'ws';
-import { AgentRegistry, spawnPrepared } from '@anshrajore/orvex-agents';
+import { AgentRegistry, type PreparedAgent } from '@anshrajore/orvex-agents';
 import { AuditLogger } from '@anshrajore/orvex-audit';
 import {
   EXIT_CODES,
@@ -19,7 +19,7 @@ import {
 import { SecretDetector } from '@anshrajore/orvex-detectors';
 import { loadPolicy, simulate, validatePolicy, writeProjectPolicy } from '@anshrajore/orvex-policy';
 import { OrvexRuntime } from '@anshrajore/orvex-runtime';
-import { selectProvider } from '@anshrajore/orvex-sandbox';
+import { selectProvider, type Sandbox, type SandboxProvider } from '@anshrajore/orvex-sandbox';
 import { runAcceptance } from './acceptance.js';
 import { doctor } from './doctor.js';
 import { banner, sessionPanel } from './ui.js';
@@ -27,6 +27,22 @@ import { banner, sessionPanel } from './ui.js';
 const program = new Command();
 const require = createRequire(import.meta.url);
 const here = path.dirname(fileURLToPath(import.meta.url));
+
+async function executePrepared(
+  provider: SandboxProvider,
+  sandbox: Sandbox | undefined,
+  prepared: PreparedAgent,
+): Promise<number> {
+  if (!sandbox) throw new Error('Sandbox initialization failed.');
+  const result = await provider.execute(sandbox, {
+    argv: prepared.argv,
+    cwd: prepared.cwd,
+    env: prepared.env,
+  });
+  if (result.stdout) process.stdout.write(result.stdout);
+  if (result.stderr) process.stderr.write(result.stderr);
+  return result.code;
+}
 
 function fail(code: number, message: string, json = false): never {
   if (json) process.stdout.write(`${JSON.stringify({ error: message, code })}\n`);
@@ -199,7 +215,7 @@ program
         runtime.end();
         return;
       }
-      const code = await spawnPrepared(prepared);
+      const code = await executePrepared(provider, runtime.sandboxInstance(), prepared);
       runtime.end();
       process.exit(code);
     }
@@ -217,7 +233,7 @@ program
         return;
       }
       process.stdout.write(`${banner()}\nWrapping ${adapter.name} with ${provider.name} (${provider.strength()})\n`);
-      const code = await spawnPrepared(prepared);
+      const code = await executePrepared(provider, runtime.sandboxInstance(), prepared);
       runtime.end();
       process.exit(code);
     } catch (error) {

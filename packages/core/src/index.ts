@@ -42,6 +42,7 @@ export {
   expandHome,
   normalizePathInput,
   tryRealpath,
+  resolvePathForPolicy,
   detectSymlinkEscape,
   classifyPath,
   isProtectedSecretPath,

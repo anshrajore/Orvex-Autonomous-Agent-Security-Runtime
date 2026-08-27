@@ -130,6 +130,7 @@ export class BubblewrapProvider implements SandboxProvider {
       bwrap,
       '--die-with-parent',
       '--unshare-pid',
+      ...(options.networkAllow.length === 0 ? ['--unshare-net'] : []),
       '--ro-bind',
       '/usr',
       '/usr',
@@ -143,9 +144,10 @@ export class BubblewrapProvider implements SandboxProvider {
       '/dev',
       '--proc',
       '/proc',
-      '--bind',
+      '--ro-bind',
       options.cwd,
       options.cwd,
+      ...options.writePaths.flatMap((writePath) => ['--bind', writePath, writePath]),
       '--chdir',
       request.cwd ?? options.cwd,
       ...request.argv,
@@ -180,6 +182,7 @@ export class MacosSandboxExecProvider implements SandboxProvider {
     if (!options) return { code: 5, stdout: '', stderr: 'sandbox not found' };
     const bin = which('sandbox-exec');
     if (!bin) return { code: 5, stdout: '', stderr: 'sandbox-exec unavailable' };
+    const networkRule = options.networkAllow.length > 0 ? '(allow network-outbound)' : '';
     const profile = `(version 1)
 (deny default)
 (allow process-exec)
@@ -190,7 +193,7 @@ export class MacosSandboxExecProvider implements SandboxProvider {
 (allow file-write* (subpath "${options.cwd}") (subpath "/private/tmp") (subpath "${os.tmpdir()}"))
 (allow file-ioctl)
 (allow file-read-metadata)
-(allow network-outbound)
+${networkRule}
 (allow mach-lookup)
 `;
     const profilePath = path.join(os.tmpdir(), `orvex-${sandbox.id}.sb`);

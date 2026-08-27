@@ -104,7 +104,7 @@ export class OrvexRuntime {
       env: this.context.env,
       readPaths: [this.options.cwd],
       writePaths: [this.options.cwd],
-      networkAllow: [],
+      networkAllow: this.options.policy.documentSnapshot().network.allow ?? [],
     });
     return this.sandboxProvider;
   }
@@ -246,12 +246,38 @@ export class OrvexRuntime {
         context: this.context,
       });
     }
+    for (const node of graph.nodes) {
+      const segmentPolicy = this.options.policy.evaluate({
+        actor: { id: this.options.agentId, kind: 'agent' },
+        action: { type: 'PROCESS_EXEC', capability: 'process.execute', verb: 'exec' },
+        resource: { kind: 'command', value: node.binary },
+        context: this.context,
+      });
+      if (segmentPolicy.decision === 'deny') {
+        const evaluated = await this.evaluate({
+          actor: { id: this.options.agentId, kind: 'agent' },
+          action: { type: 'PROCESS_EXEC', capability: 'process.execute', verb: 'exec' },
+          resource: { kind: 'command', value: command },
+          context: this.context,
+        });
+        return {
+          ...evaluated,
+          decision: 'deny',
+          sideEffectAllowed: false,
+          reason: `Command segment ${node.binary} is denied: ${segmentPolicy.reason}`,
+        };
+      }
+    }
     return this.evaluate({
       actor: { id: this.options.agentId, kind: 'agent' },
       action: { type: 'PROCESS_EXEC', capability: 'process.execute', verb: 'exec' },
       resource: { kind: 'command', value: command },
       context: this.context,
     });
+  }
+
+  sandboxInstance(): Sandbox | undefined {
+    return this.sandbox;
   }
 
   async evaluateNetwork(host: string): Promise<EvaluatedAction> {

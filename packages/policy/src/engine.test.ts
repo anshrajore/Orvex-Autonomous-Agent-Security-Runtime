@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { PolicyDocumentSchema } from '../src/schema.js';
 import { applyProfile } from '../src/profiles.js';
 import { PolicyEngine, policyHash } from '../src/engine.js';
-import { pathMatches } from '../src/matchers.js';
+import { hostMatches, pathMatches } from '../src/matchers.js';
 import type { ExecutionContext } from '@anshrajore/orvex-core';
 
 const cwd = process.cwd();
@@ -82,5 +82,18 @@ describe('policy engine', () => {
   it('matches project globs', () => {
     expect(pathMatches('./src/**', `${cwd}/src/app.ts`, cwd)).toBe(true);
     expect(pathMatches('./**', `${cwd}/README.md`, cwd)).toBe(true);
+    expect(hostMatches('10.0.0.0/8:443', '10.8.2.4', 443)).toBe(true);
+    expect(hostMatches('[::1]:443', '::1', 443)).toBe(true);
+  });
+
+  it('does not let environment assignments bypass process policy', () => {
+    const e = engine();
+    const decision = e.evaluate({
+      actor: { id: 't', kind: 'agent' },
+      action: { type: 'PROCESS_EXEC', capability: 'process.execute', verb: 'exec' },
+      resource: { kind: 'command', value: 'NODE_OPTIONS=--trace-warnings curl https://unknown.com' },
+      context: ctx(),
+    });
+    expect(decision.decision).toBe('deny');
   });
 });

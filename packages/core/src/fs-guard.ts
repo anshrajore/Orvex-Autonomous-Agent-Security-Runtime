@@ -49,6 +49,25 @@ export function tryRealpath(input: string): { real: string; symlink: boolean } {
   }
 }
 
+export function resolvePathForPolicy(input: string, cwd: string): string {
+  const requested = normalizePathInput(input, cwd);
+  let probe = requested;
+  const suffix: string[] = [];
+
+  while (!fs.existsSync(probe)) {
+    const parent = path.dirname(probe);
+    if (parent === probe) return requested;
+    suffix.unshift(path.basename(probe));
+    probe = parent;
+  }
+
+  try {
+    return path.normalize(path.join(fs.realpathSync.native(probe), ...suffix));
+  } catch {
+    return requested;
+  }
+}
+
 export function detectSymlinkEscape(requested: string, allowedRoot: string): boolean {
   const req = tryRealpath(requested).real;
   const root = tryRealpath(allowedRoot).real;
@@ -57,7 +76,7 @@ export function detectSymlinkEscape(requested: string, allowedRoot: string): boo
 }
 
 export function classifyPath(filePath: string, projectRoot: string): ResourceClass {
-  const real = tryRealpath(normalizePathInput(filePath, projectRoot)).real;
+  const real = resolvePathForPolicy(filePath, projectRoot);
   const base = path.basename(real);
   const parts = real.split(path.sep);
 
