@@ -24,6 +24,7 @@ export interface CommandGraph {
   obfuscated: boolean;
   evasionTool: boolean;
   malformed: boolean;
+  oversized: boolean;
 }
 
 interface Token {
@@ -229,6 +230,7 @@ export function parseCommand(raw: string): CommandGraph {
     obfuscated: commandObfuscated || pipelineDecodedInjection || hexDecodedInjection,
     evasionTool,
     malformed,
+    oversized: raw.length > 1_000_000,
   };
 }
 

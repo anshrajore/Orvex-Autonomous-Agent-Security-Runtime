@@ -236,14 +236,14 @@ export class OrvexRuntime {
 
   async evaluateCommand(command: string): Promise<EvaluatedAction> {
     const graph = parseCommand(command);
-    if (graph.malformed) {
+    if (graph.malformed || graph.oversized) {
       const evaluated = await this.evaluate({
         actor: { id: this.options.agentId, kind: 'agent' },
         action: { type: 'PROCESS_EXEC', capability: 'process.execute', verb: 'exec' },
         resource: { kind: 'command', value: command },
         context: this.context,
       });
-      return { ...evaluated, decision: 'deny', sideEffectAllowed: false, reason: 'Malformed shell quoting is blocked.' };
+      return { ...evaluated, decision: 'deny', sideEffectAllowed: false, reason: graph.oversized ? 'Oversized command is blocked.' : 'Malformed shell quoting is blocked.' };
     }
     for (const node of graph.nodes) {
       for (const target of node.redirectTargets) {

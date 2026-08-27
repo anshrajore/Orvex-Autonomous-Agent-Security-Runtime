@@ -51,4 +51,8 @@ describe('command parser', () => {
   it('marks unterminated quotes as malformed', () => {
     expect(parseCommand('echo "unfinished').malformed).toBe(true);
   });
+
+  it('marks oversized commands before deep analysis', () => {
+    expect(parseCommand('x'.repeat(1_000_001)).oversized).toBe(true);
+  });
 });
