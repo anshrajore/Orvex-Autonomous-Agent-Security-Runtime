@@ -26,6 +26,10 @@ describe('adversarial cases', () => {
     expect(JSON.stringify(env)).not.toContain('secret-value');
   });
 
+  it('preserves safe environment names with platform casing', () => {
+    expect(filterEnvironment({ path: '/usr/bin' }).path).toBe('/usr/bin');
+  });
+
   it('never writes raw secrets through the redactor', () => {
     const out = new Redactor().redact('Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.aaa.bbb');
     expect(out.text).toContain('[SECRET_REDACTED]');

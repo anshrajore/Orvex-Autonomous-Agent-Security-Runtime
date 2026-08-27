@@ -26,9 +26,9 @@ export function filterEnvironment(
     if (value === undefined) continue;
     if (deny.some((pattern) => matchesPattern(key, pattern))) continue;
     const explicitlyAllowed = allow.some((pattern) => matchesPattern(key, pattern));
+    const safelyAllowed = DEFAULT_SAFE_ENV.some((safeName) => safeName.toLowerCase() === key.toLowerCase());
     if (!explicitlyAllowed && isSensitiveEnvName(key)) continue;
-    if (!explicitlyAllowed && !DEFAULT_SAFE_ENV.includes(key) && isSensitiveEnvName(key)) continue;
-    if (explicitlyAllowed || DEFAULT_SAFE_ENV.includes(key)) {
+    if (explicitlyAllowed || safelyAllowed) {
       result[key] = value;
     }
   }
