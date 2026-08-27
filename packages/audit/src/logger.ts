@@ -14,6 +14,7 @@ export class AuditLogger {
   }
 
   append(event: AuditEvent): void {
+    assertSafeIdentifier(event.sessionId);
     const safe: AuditEvent = {
       ...event,
       resource: event.resource ? this.redactor.redact(event.resource).text : undefined,
@@ -28,6 +29,7 @@ export class AuditLogger {
   }
 
   writeSession(session: Session): void {
+    assertSafeIdentifier(session.id);
     fs.mkdirSync(this.root.sessions, { recursive: true });
     fs.writeFileSync(
       path.join(this.root.sessions, `${session.id}.json`),
@@ -47,6 +49,7 @@ export class AuditLogger {
   }
 
   readSessionEvents(sessionId: string): AuditEvent[] {
+    assertSafeIdentifier(sessionId);
     const file = path.join(this.root.sessions, `${sessionId}.ndjson`);
     if (!fs.existsSync(file)) return [];
     return fs
@@ -58,6 +61,7 @@ export class AuditLogger {
 
   exportNdjson(sessionId?: string): string {
     if (sessionId) {
+      assertSafeIdentifier(sessionId);
       const file = path.join(this.root.sessions, `${sessionId}.ndjson`);
       return fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
     }
@@ -100,5 +104,11 @@ export class AuditLogger {
         },
       ],
     };
+  }
+}
+
+function assertSafeIdentifier(value: string): void {
+  if (!/^[A-Za-z0-9_-]+$/.test(value)) {
+    throw new Error('Unsafe audit identifier.');
   }
 }
