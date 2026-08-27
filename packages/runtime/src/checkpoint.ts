@@ -26,9 +26,11 @@ export class CheckpointStore {
 
   create(sessionId: string, cwd: string, label: string): { id: string; files: number; hash: string } {
     fs.mkdirSync(this.root, { recursive: true });
+    fs.chmodSync(this.root, 0o700);
     const id = generateId('chk');
     const dest = path.join(this.root, sessionId, id);
     fs.mkdirSync(dest, { recursive: true });
+    fs.chmodSync(dest, 0o700);
     const files = walkFiles(cwd).filter((f) => {
       const rel = path.relative(cwd, f);
       return rel.startsWith('src') || rel === 'important' || rel.endsWith('.yml') || rel.endsWith('.md');
@@ -40,6 +42,7 @@ export class CheckpointStore {
       const target = path.join(dest, rel);
       fs.mkdirSync(path.dirname(target), { recursive: true });
       fs.writeFileSync(target, buf);
+      fs.chmodSync(target, 0o600);
       metaFiles.push({ rel, hash: sha256(buf), size: buf.length });
     }
     const meta: CheckpointMeta = {
@@ -50,6 +53,7 @@ export class CheckpointStore {
       files: metaFiles,
     };
     fs.writeFileSync(path.join(dest, 'meta.json'), JSON.stringify(meta, null, 2));
+    fs.chmodSync(path.join(dest, 'meta.json'), 0o600);
     return { id, files: metaFiles.length, hash: sha256(JSON.stringify(metaFiles)) };
   }
 
