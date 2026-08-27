@@ -72,6 +72,9 @@ export class CheckpointStore {
     if (!meta) return { ok: false, reason: 'No checkpoint found.' };
     const dest = path.join(this.root, sessionId, meta.id);
     for (const file of meta.files) {
+      if (!isSafeRelativePath(file.rel)) {
+        return { ok: false, reason: `Rollback refused. Unsafe checkpoint path: ${file.rel}` };
+      }
       const current = path.join(cwd, file.rel);
       const snap = path.join(dest, file.rel);
       if (fs.existsSync(current)) {
@@ -93,4 +96,10 @@ export class CheckpointStore {
     }
     return { ok: true, reason: `Restored checkpoint ${meta.id}` };
   }
+}
+
+function isSafeRelativePath(value: string): boolean {
+  if (!value || path.isAbsolute(value)) return false;
+  const normalized = path.normalize(value);
+  return normalized !== '..' && !normalized.startsWith(`..${path.sep}`);
 }
