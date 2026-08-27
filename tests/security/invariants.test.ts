@@ -21,6 +21,15 @@ describe('security properties', () => {
     expect(result.classification === 'SECRET' || result.classification === 'CRITICAL').toBe(true);
   });
 
+  it('finds nested and file URI MCP targets', () => {
+    const result = inspectMcpCall(
+      { server: 'filesystem', tool: 'read', arguments: { request: { uri: 'file:///tmp/secret.txt' } } },
+      process.cwd(),
+      'trusted',
+    );
+    expect(result.resourcePath).toBe('/tmp/secret.txt');
+  });
+
   it('resolves a new file below a symlink before policy matching', () => {
     const root = fs.mkdtempSync(path.join(os.tmpdir(), 'orvex-path-'));
     const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'orvex-outside-'));

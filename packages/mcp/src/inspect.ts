@@ -7,13 +7,22 @@ export interface McpCall {
 }
 
 export function extractMcpPath(call: McpCall): string | undefined {
-  const args = call.arguments;
   const keys = ['path', 'file', 'filepath', 'uri', 'target'];
-  for (const key of keys) {
-    const value = args[key];
-    if (typeof value === 'string') return value;
-  }
-  return undefined;
+  const visit = (value: unknown, depth: number): string | undefined => {
+    if (depth > 6 || value === null || typeof value !== 'object') return undefined;
+    for (const [key, nested] of Object.entries(value)) {
+      if (keys.includes(key.toLowerCase()) && typeof nested === 'string') {
+        if (nested.startsWith('file://')) {
+          try { return decodeURIComponent(new URL(nested).pathname); } catch { return nested; }
+        }
+        return nested;
+      }
+      const found = visit(nested, depth + 1);
+      if (found) return found;
+    }
+    return undefined;
+  };
+  return visit(call.arguments, 0);
 }
 
 export function inspectMcpCall(
