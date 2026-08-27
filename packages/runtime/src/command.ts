@@ -4,6 +4,7 @@ export interface CommandNode {
   binary: string;
   args: string[];
   redirects: string[];
+  redirectTargets: string[];
   envAssignments: string[];
 }
 
@@ -74,10 +75,10 @@ function tokenize(input: string): Token[] {
       if (current) commitToken();
       continue;
     }
-    if (ch === '|' || ch === ';' || ch === '&') {
+    if (ch === '|' || ch === ';' || ch === '&' || ch === '>' || ch === '<') {
       commitToken();
       const next = input[i + 1];
-      if ((ch === '&' || ch === '|') && next === ch) {
+      if ((ch === '&' || ch === '|' || ch === '>' || ch === '<') && next === ch) {
         tokens.push({ value: ch + ch, hasQuotes: false });
         i += 1;
       } else {
@@ -153,13 +154,19 @@ export function parseCommand(raw: string): CommandGraph {
   const nodes: CommandNode[] = segments.map((seg) => {
     const redirects: string[] = [];
     const args: string[] = [];
+    const redirectTargets: string[] = [];
     const envAssignments: string[] = [];
+    let awaitingRedirectTarget = false;
     let binary = '';
     
     for (let i = 0; i < seg.length; i += 1) {
       const item = seg[i]!;
       if (item.value.startsWith('>') || item.value.startsWith('<')) {
         redirects.push(item.value);
+        awaitingRedirectTarget = true;
+      } else if (awaitingRedirectTarget) {
+        redirectTargets.push(item.value);
+        awaitingRedirectTarget = false;
       } else if (!binary && isEnvironmentAssignment(item.value)) {
         envAssignments.push(item.value);
       } else if (!binary) {
@@ -172,7 +179,7 @@ export function parseCommand(raw: string): CommandGraph {
       }
     }
 
-    return { binary, args, redirects, envAssignments };
+    return { binary, args, redirects, redirectTargets, envAssignments };
   });
 
   const binaries = nodes.map((n) => n.binary.split(/[\\/]/).pop() ?? n.binary);

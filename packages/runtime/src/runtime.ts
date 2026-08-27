@@ -236,6 +236,17 @@ export class OrvexRuntime {
 
   async evaluateCommand(command: string): Promise<EvaluatedAction> {
     const graph = parseCommand(command);
+    for (const node of graph.nodes) {
+      for (const target of node.redirectTargets) {
+        const redirectDecision = await this.evaluateFile('write', target);
+        if (redirectDecision.decision === 'deny') {
+          return {
+            ...redirectDecision,
+            reason: `Redirect target ${target} is denied: ${redirectDecision.reason}`,
+          };
+        }
+      }
+    }
     const binary = graph.nodes[0]?.binary ?? command;
     if (binary === 'git' || binary.endsWith('/git')) {
       const analysis = analyzeGitArgs(graph.nodes[0]?.args ?? []);

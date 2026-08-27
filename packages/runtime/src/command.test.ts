@@ -37,4 +37,10 @@ describe('command parser', () => {
     expect(graph.nodes[0]?.binary).toBe('curl');
     expect(graph.nodes[0]?.envAssignments).toEqual(['NODE_OPTIONS=--inspect']);
   });
+
+  it('records redirect targets separately from command arguments', () => {
+    const graph = parseCommand('node script.js > ~/.ssh/id_rsa');
+    expect(graph.nodes[0]?.redirects).toEqual(['>']);
+    expect(graph.nodes[0]?.redirectTargets).toEqual(['~/.ssh/id_rsa']);
+  });
 });
