@@ -36,7 +36,7 @@ export function isSensitiveDestination(host: string): boolean {
 export function parseCidrMatch(cidr: string, ip: string): boolean {
   const [base, bitsRaw] = cidr.split('/');
   const bits = Number(bitsRaw);
-  if (!base || !Number.isFinite(bits)) return ip === cidr;
+  if (!base || !Number.isInteger(bits) || bits < 0 || bits > 32) return false;
   const ipNum = ipToInt(ip);
   const baseNum = ipToInt(base);
   if (ipNum === null || baseNum === null) return false;

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { isSensitiveDestination } from './network.js';
+import { parseCidrMatch } from './network.js';
 
 describe('network destination normalization', () => {
   it('blocks loopback and metadata URLs across common spellings', () => {
@@ -14,5 +15,9 @@ describe('network destination normalization', () => {
 
   it('does not classify a public host as private', () => {
     expect(isSensitiveDestination('https://github.com:443')).toBe(false);
+  });
+
+  it('rejects malformed CIDR masks', () => {
+    expect(parseCidrMatch('10.0.0.0/40', '10.0.0.1')).toBe(false);
   });
 });
