@@ -32,19 +32,21 @@ export function Console({
 }) {
   const [activeTab, setActiveTab] = useState<(typeof NAV_TABS)[number]['id']>('Overview');
   const [filterQuery, setFilterQuery] = useState('');
+  const [decisionFilter, setDecisionFilter] = useState<'all' | EventRow['decision']>('all');
 
   const blockedEvents = useMemo(() => events.filter((e) => e.decision === 'deny'), [events]);
   const peakRisk = useMemo(() => Math.max(0, ...events.map((e) => e.risk.score), 0), [events]);
 
   const filteredEvents = useMemo(() => {
-    if (!filterQuery) return events;
-    return events.filter(
-      (e) =>
-        e.action.toLowerCase().includes(filterQuery.toLowerCase()) ||
-        (e.resource && e.resource.toLowerCase().includes(filterQuery.toLowerCase())) ||
-        e.reason.toLowerCase().includes(filterQuery.toLowerCase())
-    );
-  }, [events, filterQuery]);
+    if (!filterQuery && decisionFilter === 'all') return events;
+    const query = filterQuery.toLowerCase();
+    return events.filter((e) => {
+      const matchesDecision = decisionFilter === 'all' || e.decision === decisionFilter;
+      const matchesQuery = !query || e.action.toLowerCase().includes(query) ||
+        Boolean(e.resource?.toLowerCase().includes(query)) || e.reason.toLowerCase().includes(query);
+      return matchesDecision && matchesQuery;
+    });
+  }, [events, filterQuery, decisionFilter]);
 
   return (
     <div className="min-h-screen bg-black text-white font-sans flex flex-col">
@@ -185,6 +187,17 @@ export function Console({
                   onChange={(e) => setFilterQuery(e.target.value)}
                   className="rounded-xl border border-line bg-surface px-4 py-1.5 text-xs text-white placeholder-dim focus:outline-none focus:border-dim w-full md:w-64"
                 />
+                <select
+                  value={decisionFilter}
+                  onChange={(e) => setDecisionFilter(e.target.value as typeof decisionFilter)}
+                  className="rounded-xl border border-line bg-surface px-3 py-1.5 text-xs text-white focus:outline-none focus:border-dim"
+                  aria-label="Filter by decision"
+                >
+                  <option value="all">All decisions</option>
+                  <option value="allow">Allowed</option>
+                  <option value="ask">Needs approval</option>
+                  <option value="deny">Blocked</option>
+                </select>
               </div>
               <EventTable events={filteredEvents} />
             </div>
