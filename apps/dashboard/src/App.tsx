@@ -93,16 +93,21 @@ export function App() {
   const [events, setEvents] = useState<EventRow[]>(DEFAULT_SAMPLE_EVENTS);
 
   useEffect(() => {
-    void fetch('/api/events')
+    let active = true;
+    const refresh = () => fetch('/api/events')
       .then((r) => r.json())
       .then((data: EventRow[]) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (active && Array.isArray(data) && data.length > 0) {
           setEvents(data);
         }
       })
-      .catch(() => {
-        // Retain default sample events if offline/standalone
-      });
+      .catch(() => undefined);
+    void refresh();
+    const timer = window.setInterval(refresh, 2000);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
   }, []);
 
   if (view === 'console') {
