@@ -261,7 +261,7 @@ export class DockerProvider implements SandboxProvider {
       '-w',
       '/work',
       '--network',
-      options.networkAllow.length ? 'bridge' : 'none',
+      'none',
       'node:22-alpine',
       ...request.argv,
     ];

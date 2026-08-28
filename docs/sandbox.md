@@ -6,7 +6,7 @@ Orvex never claims a Node.js wrapper is kernel isolation.
 | --- | --- | --- | --- |
 | bubblewrap | Linux, `bwrap` on PATH | STRONG | Namespaces + bind mounts for the wrapped command |
 | sandbox-exec | macOS | MODERATE | Seatbelt profile generated from cwd write/read paths. Network rules are coarse. |
-| docker | `docker` on PATH | STRONG | Optional container run; requires an image and is not enabled unless selected |
+| docker | `docker` on PATH | STRONG | Optional container run with `--network none`; domain allowlists require a controlled proxy |
 | fallback-monitor | always | WEAK | Policy evaluation, env filter, audit. No syscall isolation. |
 
 `orvex doctor` prints the provider that `selectProvider()` actually chose.
