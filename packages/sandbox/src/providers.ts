@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { generateId, type SandboxStrength } from '@anshrajore/orvex-core';
+import { filterEnvironment, generateId, type SandboxStrength } from '@anshrajore/orvex-core';
 
 export interface SandboxOptions {
   cwd: string;
@@ -104,7 +104,7 @@ export class FallbackProvider implements SandboxProvider {
     }
     return run(request.argv, {
       cwd: request.cwd ?? options.cwd,
-      env: { ...options.env, ...request.env },
+      env: mergeSandboxEnv(options.env, request.env),
       timeoutMs: options.maxExecutionMinutes ? options.maxExecutionMinutes * 60_000 : undefined,
     });
   }
@@ -163,7 +163,7 @@ export class BubblewrapProvider implements SandboxProvider {
       ...request.argv,
     ];
     return run(argv, {
-      env: { ...options.env, ...request.env },
+      env: mergeSandboxEnv(options.env, request.env),
       timeoutMs: options.maxExecutionMinutes ? options.maxExecutionMinutes * 60_000 : undefined,
     });
   }
@@ -213,7 +213,7 @@ ${networkRule}
     fs.writeFileSync(profilePath, profile, 'utf8');
     return run([bin, '-f', profilePath, ...request.argv], {
       cwd: request.cwd ?? options.cwd,
-      env: { ...options.env, ...request.env },
+      env: mergeSandboxEnv(options.env, request.env),
       timeoutMs: options.maxExecutionMinutes ? options.maxExecutionMinutes * 60_000 : undefined,
     });
   }
@@ -258,12 +258,16 @@ export class DockerProvider implements SandboxProvider {
       'node:22-alpine',
       ...request.argv,
     ];
-    return run(argv, { env: options.env, timeoutMs: options.maxExecutionMinutes ? options.maxExecutionMinutes * 60_000 : undefined });
+    return run(argv, { env: mergeSandboxEnv(options.env, request.env), timeoutMs: options.maxExecutionMinutes ? options.maxExecutionMinutes * 60_000 : undefined });
   }
 
   async destroy(sandboxId: string): Promise<void> {
     sandboxes.delete(sandboxId);
   }
+}
+
+function mergeSandboxEnv(base: Record<string, string>, override?: Record<string, string>): Record<string, string> {
+  return { ...base, ...filterEnvironment(override ?? {}) };
 }
 
 export async function selectProvider(): Promise<SandboxProvider> {
