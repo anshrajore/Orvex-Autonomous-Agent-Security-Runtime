@@ -79,6 +79,7 @@ function run(argv: string[], options: { cwd?: string; env?: NodeJS.ProcessEnv; t
 }
 
 const sandboxes = new Map<string, SandboxOptions>();
+const sandboxProfiles = new Map<string, string>();
 
 export class FallbackProvider implements SandboxProvider {
   name = 'fallback-monitor';
@@ -211,6 +212,7 @@ ${networkRule}
 `;
     const profilePath = path.join(os.tmpdir(), `orvex-${sandbox.id}.sb`);
     fs.writeFileSync(profilePath, profile, 'utf8');
+    sandboxProfiles.set(sandbox.id, profilePath);
     return run([bin, '-f', profilePath, ...request.argv], {
       cwd: request.cwd ?? options.cwd,
       env: mergeSandboxEnv(options.env, request.env),
@@ -220,6 +222,11 @@ ${networkRule}
 
   async destroy(sandboxId: string): Promise<void> {
     sandboxes.delete(sandboxId);
+    const profilePath = sandboxProfiles.get(sandboxId);
+    if (profilePath) {
+      fs.rmSync(profilePath, { force: true });
+      sandboxProfiles.delete(sandboxId);
+    }
   }
 }
 
