@@ -404,8 +404,14 @@ program.command('rollback').argument('<session-id>').action((sessionId: string) 
 const secrets = program.command('secrets');
 secrets.command('scan').argument('[file]').action((file?: string) => {
   const detector = new SecretDetector();
-  const text = fs.readFileSync(file ?? '.env', 'utf8');
+  const target = file ?? '.env';
+  if (!fs.existsSync(target)) fail(EXIT_CODES.CONFIGURATION_ERROR, `File not found: ${target}`);
+  const text = fs.readFileSync(target, 'utf8');
   const matches = detector.scan(text);
+  if (program.opts<{ json?: boolean }>().json) {
+    process.stdout.write(`${JSON.stringify({ file: target, count: matches.length, matches: matches.map(({ type, start, end }) => ({ type, start, end })) })}\n`);
+    return;
+  }
   process.stdout.write(`${matches.length} secret pattern(s) — values not printed\n`);
   for (const match of matches) process.stdout.write(`${match.type} @ ${match.start}\n`);
 });
