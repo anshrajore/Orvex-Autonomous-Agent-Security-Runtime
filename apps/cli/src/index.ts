@@ -442,6 +442,15 @@ mcp.command('trust').argument('<server>').argument('<level>').action((server: st
   process.stdout.write(`Set ${server} trust=${level} in .orvex.yml (not auto-written for safety).\n`);
 });
 
+const agents = program.command('agents').description('Agent adapters');
+agents.command('list').action(async () => {
+  const registry = new AgentRegistry();
+  for (const adapter of registry.list()) {
+    const detected = await adapter.detect();
+    process.stdout.write(`${adapter.id}\t${detected ? 'detected' : 'not-found'}\t${adapter.name}\n`);
+  }
+});
+
 const git = program.command('git');
 git.command('status').action(() => {
   const loaded = loadPolicy({ cwd: process.cwd() });
