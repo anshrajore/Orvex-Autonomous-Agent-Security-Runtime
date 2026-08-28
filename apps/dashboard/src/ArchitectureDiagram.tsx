@@ -88,8 +88,9 @@ export function ArchitectureDiagram() {
               {/* Arrow on mobile or desktop */}
               {idx < nodes.length - 1 && (
                 <div className="hidden md:flex justify-center my-1 text-dim">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg className="orvex-flow-arrow w-4 h-4" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <path className="orvex-flow-track" stroke="currentColor" strokeLinecap="round" strokeWidth={1.5} d="M3 12h15" />
+                    <path className="orvex-flow-head" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m14 7 5 5-5 5" />
                   </svg>
                 </div>
               )}

@@ -1,6 +1,6 @@
 {
   "name": "@anshrajore/orvex-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Developer SDK for Orvex — Embed autonomous AI agent security, zero-trust policy evaluation, and composite risk scoring into your applications.",
   "license": "Apache-2.0",
   "author": {

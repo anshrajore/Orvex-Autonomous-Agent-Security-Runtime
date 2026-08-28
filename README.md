@@ -128,11 +128,231 @@ orvex session history                 # List previous execution sessions
 orvex session replay ses_f7b84ef6     # Replay audit trail in terminal or Markdown
 orvex audit export --format sarif     # Export SARIF 2.1.0 for CI/CD
 orvex checkpoint create               # Take a cryptographic file tree snapshot
-orvex rollback chk_9a18cf42           # Revert workspace to snapshot state
+orvex rollback <session-id>          # Revert the latest snapshot for a session
 orvex dashboard                       # Launch local web console (127.0.0.1:4173)
 ```
 
 **Exit Codes:** `0` Success · `1` Policy Violation · `2` Blocked Incursion · `3` Security Error · `4` Config Error · `5` Sandbox Unavailable · `6` Approval Denied.
+
+## Using Orvex From the Terminal
+
+### 1. Install and initialize
+
+Use the published CLI package:
+
+```bash
+npm install --global orvex-cli
+orvex version
+cd path/to/your-project
+orvex init --profile balanced
+```
+
+For a source checkout, install the workspace dependencies and build first:
+
+```bash
+pnpm install
+pnpm build
+node apps/cli/dist/index.js init --profile balanced
+```
+
+`orvex init` creates `.orvex.yml` in the current project. The project policy
+is loaded together with the global configuration at
+`~/.config/orvex/config.yml`; project rules apply only to that working
+directory.
+
+### 2. Inspect the host before running an agent
+
+```bash
+orvex doctor
+orvex agents list
+orvex policy validate
+orvex policy test
+```
+
+`doctor` reports the actual sandbox provider and strength. A `WEAK` fallback
+means policy evaluation and monitoring are active, but kernel isolation is not.
+Do not treat a weak fallback as equivalent to Docker, Bubblewrap, or Seatbelt.
+
+### 3. Run a supported agent
+
+```bash
+orvex run claude
+orvex run openclaw
+orvex run codex
+orvex run gemini
+orvex run opencode
+```
+
+Arguments after `--` go to the underlying agent:
+
+```bash
+orvex run claude -- --model sonnet
+orvex run codex -- --full-auto
+```
+
+Agent flags never override Orvex policy. A dangerous flag can change the
+agent's behavior, but Orvex still evaluates filesystem, process, network,
+secret, MCP, and Git actions.
+
+### 4. Run any executable
+
+Generic mode works with a local executable or a command found on `PATH`:
+
+```bash
+orvex run -- ./my-agent
+orvex run -- ./my-agent --project ./demo
+orvex run -- python3 agent.py
+```
+
+Use dry-run to inspect the launch boundary without starting the agent:
+
+```bash
+orvex run --dry-run -- ./my-agent
+```
+
+The generic adapter provides the platform's available sandbox and filtered
+environment. It cannot infer tool calls made through an opaque application,
+so use an agent adapter or MCP integration when one is available.
+
+### 5. Configure permissions
+
+Edit `.orvex.yml` to grant only the project capabilities the agent needs:
+
+```yaml
+version: 1
+profile: balanced
+
+filesystem:
+  default: deny
+  read:
+    allow:
+      - ./src/**
+      - ./README.md
+      - ./package.json
+  write:
+    allow:
+      - ./src/**
+      - ./tests/**
+  delete:
+    default: deny
+
+process:
+  default: deny
+  allow:
+    - node
+    - npm
+    - git
+
+network:
+  default: deny
+  allow:
+    - github.com:443
+    - registry.npmjs.org:443
+
+secrets:
+  default: deny
+
+mcp:
+  default: deny
+```
+
+Validate and simulate changes before launching:
+
+```bash
+orvex policy validate
+orvex policy test
+```
+
+Rules are default-deny for the balanced profile. Secret paths such as `.env`,
+`~/.ssh`, cloud credentials, private keys, and system directories remain
+protected even if a broad project glob would otherwise match them.
+
+### 6. Choose approval behavior
+
+```bash
+orvex run claude --approval-mode ask
+orvex run claude --approval-mode strict
+orvex run claude --approval-mode auto
+```
+
+`ask` requests human approval for policy decisions marked `ASK`. `strict`
+denies those decisions in non-interactive runs. `auto` can approve an ASK
+decision, but it cannot override a hard deny or a critical command guard.
+Use `--profile ci` for unattended pipelines; CI has no interactive prompts and
+resolves approval requests as denies.
+
+### 7. Review sessions and audit output
+
+Every session creates local, redacted records under `~/.orvex/`:
+
+```bash
+orvex session list
+orvex session show <session-id>
+orvex session history
+orvex session replay <session-id>
+orvex session export <session-id> --format markdown
+orvex audit export --format ndjson > audit.ndjson
+orvex audit export --format sarif > orvex.sarif
+```
+
+Use JSON output for automation:
+
+```bash
+orvex --json session list
+orvex --json secrets scan .env
+```
+
+Raw secret values, authorization headers, cookies, tokens, and private keys
+are redacted before persistence. Audit data stays local unless you explicitly
+export it.
+
+### 8. Checkpoints and rollback
+
+Create a snapshot before a large autonomous change:
+
+```bash
+orvex checkpoint create
+orvex checkpoint list
+orvex rollback <session-id>
+```
+
+Rollback refuses to overwrite a file that changed after the checkpoint. Review
+the refusal and resolve the file manually rather than losing independent work.
+
+### 9. Run the local dashboard
+
+Build the dashboard and bind it to loopback:
+
+```bash
+pnpm --filter @anshrajore/orvex-dashboard build
+orvex dashboard
+orvex dashboard --port 4174
+```
+
+Open `http://127.0.0.1:4173` or the selected port. The dashboard polls a
+bounded live event window and never exposes a public listener by default.
+
+### 10. Use Orvex in CI
+
+CI mode is non-interactive and fail-closed for approval requests:
+
+```bash
+orvex run --profile ci -- ./my-agent
+orvex ci
+orvex audit export --format sarif > orvex.sarif
+```
+
+Use the process exit code to fail a job on a policy violation. Keep the
+workspace policy in version control and review changes like source code.
+
+### Security boundary
+
+Orvex is defense in depth, not a guarantee that an agent is safe. Sandbox
+strength varies by operating system, network allowlists depend on the selected
+backend, and prompt-injection detection is heuristic. An agent started
+outside `orvex run` is outside Orvex's protection boundary. Run `orvex doctor`
+on every target host and read the limitations in `docs/sandbox.md` and
+`docs/threat-model.md` before enabling unattended execution.
 
 ---
 

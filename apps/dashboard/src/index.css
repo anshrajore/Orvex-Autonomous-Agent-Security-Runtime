@@ -60,3 +60,37 @@ body,
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+@keyframes orvex-flow-travel {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+@keyframes orvex-flow-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .orvex-flow-track {
+    stroke-dasharray: 2 6;
+    animation: orvex-flow-travel 1.8s linear infinite;
+  }
+
+  .orvex-flow-head {
+    animation: orvex-flow-pulse 1.8s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orvex-flow-track {
+    stroke-dasharray: none;
+  }
+}
