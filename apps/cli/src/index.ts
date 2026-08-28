@@ -494,9 +494,18 @@ program.command('dashboard').option('--port <port>', 'Local dashboard port', '41
       res.end(JSON.stringify(events.slice(-200)));
       return;
     }
-    const file = url === '/' ? '/index.html' : (url.split('?')[0] ?? '/index.html');
-    const target = path.join(dashboardDir, file);
-    if (!target.startsWith(dashboardDir)) {
+    let file = '/index.html';
+    try {
+      file = url === '/' ? '/index.html' : decodeURIComponent(url.split('?')[0] ?? '/index.html');
+    } catch {
+      res.writeHead(400);
+      res.end('invalid URL');
+      return;
+    }
+    const target = path.resolve(dashboardDir, `.${file}`);
+    const resolvedTarget = fs.existsSync(target) ? fs.realpathSync.native(target) : target;
+    const root = fs.realpathSync.native(dashboardDir);
+    if (resolvedTarget !== root && !resolvedTarget.startsWith(`${root}${path.sep}`)) {
       res.writeHead(403);
       res.end('forbidden');
       return;
