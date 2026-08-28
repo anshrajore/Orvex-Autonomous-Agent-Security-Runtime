@@ -76,6 +76,14 @@ export class PolicyEngine {
     rules: Rule[],
   ): PolicyDecision {
     const raw = resource.value;
+    if (raw.includes('\0')) {
+      return this.finish('deny', 'NUL-byte paths are invalid and blocked.', 90, rules, context, {
+        id: 'filesystem.invalid-path',
+        effect: 'deny',
+        priority: 150,
+        capability: cap,
+      });
+    }
     const abs = resolvePathForPolicy(raw, context.cwd);
     const classification = classifyPath(abs, context.cwd);
     resource.classification = classification;

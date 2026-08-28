@@ -96,4 +96,14 @@ describe('policy engine', () => {
     });
     expect(decision.decision).toBe('deny');
   });
+
+  it('blocks NUL-byte filesystem paths', () => {
+    const decision = engine().evaluate({
+      actor: { id: 't', kind: 'agent' },
+      action: { type: 'FILE_READ', capability: 'filesystem.read', verb: 'read' },
+      resource: { kind: 'file', value: './src/app.ts\0../../.env' },
+      context: ctx(),
+    });
+    expect(decision.decision).toBe('deny');
+  });
 });
