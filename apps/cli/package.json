@@ -46,6 +46,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "pnpm build && pnpm typecheck",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src"
   },
