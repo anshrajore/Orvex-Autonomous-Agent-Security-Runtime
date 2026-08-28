@@ -477,9 +477,12 @@ program.command('ci').action(async () => {
   process.exit(blockedOk ? 0 : EXIT_CODES.POLICY_VIOLATION);
 });
 
-program.command('dashboard').action(async () => {
+program.command('dashboard').option('--port <port>', 'Local dashboard port', '4173').action(async (opts: { port: string }) => {
   const host = '127.0.0.1';
-  const port = 4173;
+  const port = Number(opts.port);
+  if (!Number.isInteger(port) || port < 1024 || port > 65535) {
+    fail(EXIT_CODES.CONFIGURATION_ERROR, 'Dashboard port must be an integer from 1024 to 65535.');
+  }
   const dashboardDir = path.resolve(here, '../../dashboard/dist');
   const server = http.createServer((req, res) => {
     const url = req.url ?? '/';
