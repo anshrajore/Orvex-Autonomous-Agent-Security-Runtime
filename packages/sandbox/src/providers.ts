@@ -197,14 +197,17 @@ export class MacosSandboxExecProvider implements SandboxProvider {
     const bin = which('sandbox-exec');
     if (!bin) return { code: 5, stdout: '', stderr: 'sandbox-exec unavailable' };
     const networkRule = options.networkAllow.length > 0 ? '(allow network-outbound)' : '';
+    const safeCwd = schemePath(options.cwd);
+    const safeHome = schemePath(os.homedir());
+    const safeTmp = schemePath(os.tmpdir());
     const profile = `(version 1)
 (deny default)
 (allow process-exec)
 (allow process-fork)
 (allow signal)
 (allow sysctl-read)
-(allow file-read* (subpath "/usr") (subpath "/bin") (subpath "/opt") (subpath "/System") (subpath "/Library") (subpath "/private/tmp") (subpath "${options.cwd}") (subpath "${os.homedir()}/.orvex"))
-(allow file-write* (subpath "${options.cwd}") (subpath "/private/tmp") (subpath "${os.tmpdir()}"))
+(allow file-read* (subpath "/usr") (subpath "/bin") (subpath "/opt") (subpath "/System") (subpath "/Library") (subpath "/private/tmp") (subpath "${safeCwd}") (subpath "${safeHome}/.orvex"))
+(allow file-write* (subpath "${safeCwd}") (subpath "/private/tmp") (subpath "${safeTmp}"))
 (allow file-ioctl)
 (allow file-read-metadata)
 ${networkRule}
@@ -228,6 +231,10 @@ ${networkRule}
       sandboxProfiles.delete(sandboxId);
     }
   }
+}
+
+function schemePath(value: string): string {
+  return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
 
 export class DockerProvider implements SandboxProvider {
