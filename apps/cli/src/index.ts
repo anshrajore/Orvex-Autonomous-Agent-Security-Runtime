@@ -498,7 +498,7 @@ program.command('dashboard').option('--port <port>', 'Local dashboard port', '41
     if (url.startsWith('/api/events')) {
       const audit = new AuditLogger();
       const latest = audit.listSessions()[0];
-      const events = latest ? audit.readSessionEvents(latest.id) : [];
+      const events = latest ? audit.readSessionEvents(latest.id, 200) : [];
       res.writeHead(200, { 'content-type': 'application/json' });
       res.end(JSON.stringify(events.slice(-200)));
       return;

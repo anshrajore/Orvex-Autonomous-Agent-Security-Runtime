@@ -47,15 +47,16 @@ export class AuditLogger {
       .sort((a, b) => b.startedAt.localeCompare(a.startedAt));
   }
 
-  readSessionEvents(sessionId: string): AuditEvent[] {
+  readSessionEvents(sessionId: string, limit?: number): AuditEvent[] {
     assertSafeIdentifier(sessionId);
     const file = path.join(this.root.sessions, `${sessionId}.ndjson`);
     if (!fs.existsSync(file)) return [];
-    return fs
+    const lines = fs
       .readFileSync(file, 'utf8')
       .split('\n')
-      .filter(Boolean)
-      .map((line) => JSON.parse(line) as AuditEvent);
+      .filter(Boolean);
+    const selected = limit && limit > 0 ? lines.slice(-limit) : lines;
+    return selected.map((line) => JSON.parse(line) as AuditEvent);
   }
 
   exportNdjson(sessionId?: string): string {
