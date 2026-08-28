@@ -303,6 +303,10 @@ policy
 const session = program.command('session').description('Session recorder');
 session.command('list').action(() => {
   const sessions = new AuditLogger().listSessions();
+  if (program.opts<{ json?: boolean }>().json) {
+    process.stdout.write(`${JSON.stringify(sessions)}\n`);
+    return;
+  }
   for (const s of sessions) {
     process.stdout.write(`${s.id}  ${s.agentId}  ${s.startedAt}  risk=${s.riskScore}\n`);
   }
