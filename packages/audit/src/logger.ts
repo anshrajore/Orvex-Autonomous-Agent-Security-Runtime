@@ -21,10 +21,10 @@ export class AuditLogger {
       reason: this.redactor.redact(event.reason).text,
     };
     const file = path.join(this.root.audit, `${event.sessionId}.ndjson`);
-    fs.appendFileSync(file, `${JSON.stringify(safe)}\n`, 'utf8');
+    appendDurably(file, `${JSON.stringify(safe)}\n`);
     fs.chmodSync(file, 0o600);
     const sessionFile = path.join(this.root.sessions, `${event.sessionId}.ndjson`);
-    fs.appendFileSync(sessionFile, `${JSON.stringify(safe)}\n`, 'utf8');
+    appendDurably(sessionFile, `${JSON.stringify(safe)}\n`);
     fs.chmodSync(sessionFile, 0o600);
   }
 
@@ -109,5 +109,15 @@ export class AuditLogger {
 function assertSafeIdentifier(value: string): void {
   if (!/^[A-Za-z0-9_-]+$/.test(value)) {
     throw new Error('Unsafe audit identifier.');
+  }
+}
+
+function appendDurably(file: string, value: string): void {
+  const descriptor = fs.openSync(file, 'a', 0o600);
+  try {
+    fs.writeSync(descriptor, value, undefined, 'utf8');
+    fs.fsyncSync(descriptor);
+  } finally {
+    fs.closeSync(descriptor);
   }
 }
