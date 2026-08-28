@@ -31,12 +31,11 @@ export class AuditLogger {
   writeSession(session: Session): void {
     assertSafeIdentifier(session.id);
     fs.mkdirSync(this.root.sessions, { recursive: true });
-    fs.writeFileSync(
-      path.join(this.root.sessions, `${session.id}.json`),
-      JSON.stringify(session, null, 2),
-      'utf8',
-    );
-    fs.chmodSync(path.join(this.root.sessions, `${session.id}.json`), 0o600);
+    const target = path.join(this.root.sessions, `${session.id}.json`);
+    const temporary = `${target}.${process.pid}.tmp`;
+    fs.writeFileSync(temporary, JSON.stringify(session, null, 2), { encoding: 'utf8', mode: 0o600 });
+    fs.chmodSync(temporary, 0o600);
+    fs.renameSync(temporary, target);
   }
 
   listSessions(): Session[] {
