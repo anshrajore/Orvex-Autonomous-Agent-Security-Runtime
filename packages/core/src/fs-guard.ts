@@ -69,8 +69,8 @@ export function resolvePathForPolicy(input: string, cwd: string): string {
 }
 
 export function detectSymlinkEscape(requested: string, allowedRoot: string): boolean {
-  const req = tryRealpath(requested).real;
-  const root = tryRealpath(allowedRoot).real;
+  const req = resolvePathForPolicy(requested, allowedRoot);
+  const root = resolvePathForPolicy('.', allowedRoot);
   const rel = path.relative(root, req);
   return rel.startsWith('..') || path.isAbsolute(rel);
 }

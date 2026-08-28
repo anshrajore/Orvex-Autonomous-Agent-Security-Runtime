@@ -4,7 +4,7 @@ import { inspectMcpCall } from '@anshrajore/orvex-mcp';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { classifyPath, resolvePathForPolicy } from '@anshrajore/orvex-core';
+import { classifyPath, detectSymlinkEscape, resolvePathForPolicy } from '@anshrajore/orvex-core';
 
 describe('security properties', () => {
   it('treats env files as secrets', () => {
@@ -37,6 +37,7 @@ describe('security properties', () => {
     const resolved = resolvePathForPolicy('./allowed-link/new-file.txt', root);
     expect(resolved.startsWith(fs.realpathSync.native(outside))).toBe(true);
     expect(classifyPath('./allowed-link/new-file.txt', root)).toBe('SENSITIVE');
+    expect(detectSymlinkEscape('./allowed-link/new-file.txt', root)).toBe(true);
     fs.rmSync(root, { recursive: true, force: true });
     fs.rmSync(outside, { recursive: true, force: true });
   });
