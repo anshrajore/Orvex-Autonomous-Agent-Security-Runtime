@@ -146,6 +146,9 @@ export function Console({
                 <div className="rounded-2xl border border-line bg-surface p-5">
                   <div className="text-[11px] font-mono uppercase tracking-widest text-mute">Peak Risk Level</div>
                   <div className="text-3xl font-extrabold text-white mt-2">{peakRisk}<span className="text-sm text-dim">/100</span></div>
+                  <div className="mt-3 h-1.5 rounded-full bg-neutral-800 overflow-hidden" aria-label={`Risk ${peakRisk} out of 100`}>
+                    <div className="h-full bg-white transition-all" style={{ width: `${peakRisk}%` }} />
+                  </div>
                   <div className="text-[11px] text-dim mt-1 font-mono">{peakRisk > 75 ? 'Critical Risk Blocked' : 'Normal Operations'}</div>
                 </div>
 
