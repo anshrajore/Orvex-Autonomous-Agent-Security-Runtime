@@ -24,7 +24,7 @@ import {
 import { AuditLogger } from '@anshrajore/orvex-audit';
 import { PromptInjectionDetector, Redactor } from '@anshrajore/orvex-detectors';
 import { analyzeGitArgs } from '@anshrajore/orvex-git';
-import { inspectMcpCall, type McpCall } from '@anshrajore/orvex-mcp';
+import { inspectMcpCall, inspectMcpResult as inspectMcpResultPayload, type McpCall } from '@anshrajore/orvex-mcp';
 import { PolicyEngine, type PolicyRequest } from '@anshrajore/orvex-policy';
 import { BehaviorBaseline, RiskEngine } from '@anshrajore/orvex-risk';
 import { selectProvider, type Sandbox, type SandboxProvider } from '@anshrajore/orvex-sandbox';
@@ -322,6 +322,19 @@ export class OrvexRuntime {
   async evaluateMcp(call: McpCall): Promise<EvaluatedAction> {
     const trust = this.options.policy.documentSnapshot().mcp.servers?.[call.server]?.trust ?? 'unknown';
     const inspected = inspectMcpCall(call, this.options.cwd, trust);
+    if (inspected.malformed || inspected.oversized) {
+      return this.evaluate({
+        actor: { id: this.options.agentId, kind: 'agent' },
+        action: { type: 'MCP_CALL', capability: 'mcp.call', verb: call.tool },
+        resource: { kind: 'mcp', value: `${call.server}/${call.tool}` },
+        context: this.context,
+      }).then((decision) => ({
+        ...decision,
+        decision: 'deny',
+        sideEffectAllowed: false,
+        reason: `MCP request rejected before execution: ${inspected.reason}`,
+      }));
+    }
     const resourcePath = inspected.resourceTargets.find((target) => target.path)?.path;
     if (resourcePath) {
       const fileDecision = await this.evaluateFile('read', resourcePath);
@@ -333,6 +346,10 @@ export class OrvexRuntime {
       resource: { kind: 'mcp', value: `${call.server}/${call.tool}` },
       context: this.context,
     });
+  }
+
+  inspectMcpResult(result: unknown): ReturnType<typeof inspectMcpResultPayload> {
+    return inspectMcpResultPayload(result);
   }
 
   scanUntrustedText(text: string, label: string): { escalate: boolean; score: number } {
