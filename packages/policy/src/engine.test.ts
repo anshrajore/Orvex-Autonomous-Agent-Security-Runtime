@@ -106,4 +106,15 @@ describe('policy engine', () => {
     });
     expect(decision.decision).toBe('deny');
   });
+
+  it('enforces MCP tool-level allowlists', () => {
+    const document = applyProfile('balanced', PolicyDocumentSchema.parse({
+      mcp: { default: 'deny', servers: { github: { trust: 'verified', allowTools: ['search_*'] } } },
+    }));
+    const e = new PolicyEngine(document, policyHash(document));
+    const allowed = e.evaluate({ actor: { id: 't', kind: 'agent' }, action: { type: 'MCP_CALL', capability: 'mcp.call', verb: 'search_code' }, resource: { kind: 'mcp', value: 'github/search_code' }, context: ctx() });
+    const denied = e.evaluate({ actor: { id: 't', kind: 'agent' }, action: { type: 'MCP_CALL', capability: 'mcp.call', verb: 'delete_repo' }, resource: { kind: 'mcp', value: 'github/delete_repo' }, context: ctx() });
+    expect(allowed.decision).toBe('allow');
+    expect(denied.decision).toBe('deny');
+  });
 });
