@@ -7,11 +7,15 @@ export function inspectMcpResult(
   limits: McpInspectionLimits = DEFAULT_MCP_LIMITS,
 ): McpResultInspection {
   assertMcpLimits(result, limits);
-  const serialized = JSON.stringify(result) ?? '';
+  const serialized = typeof result === 'string' ? result : JSON.stringify(result) ?? '';
   const injection = new PromptInjectionDetector().scan(serialized, 'UNTRUSTED');
   const redacted = new Redactor().redact(serialized);
   let redactedResult: unknown = result;
-  try { redactedResult = JSON.parse(redacted.text); } catch { redactedResult = '[MCP_RESULT_REDACTED]'; }
+  if (typeof result !== 'string') {
+    try { redactedResult = JSON.parse(redacted.text); } catch { redactedResult = '[MCP_RESULT_REDACTED]'; }
+  } else {
+    redactedResult = redacted.text;
+  }
   return {
     redactedResult,
     promptInjectionScore: injection.score,
