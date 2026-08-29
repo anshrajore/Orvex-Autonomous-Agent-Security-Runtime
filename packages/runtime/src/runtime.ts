@@ -344,7 +344,15 @@ export class OrvexRuntime {
       actor: { id: this.options.agentId, kind: 'agent' },
       action: { type: 'MCP_CALL', capability: 'mcp.call', verb: call.tool },
       resource: { kind: 'mcp', value: `${call.server}/${call.tool}` },
-      context: this.context,
+      context: {
+        ...this.context,
+        provenance: {
+          sourceId: `${call.server}/${call.tool}`,
+          trustZone: 'UNTRUSTED',
+          origin: 'mcp',
+          timestamp: nowIso(),
+        },
+      },
     });
   }
 
