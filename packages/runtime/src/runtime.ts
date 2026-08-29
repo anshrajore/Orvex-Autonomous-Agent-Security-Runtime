@@ -322,8 +322,9 @@ export class OrvexRuntime {
   async evaluateMcp(call: McpCall): Promise<EvaluatedAction> {
     const trust = this.options.policy.documentSnapshot().mcp.servers?.[call.server]?.trust ?? 'unknown';
     const inspected = inspectMcpCall(call, this.options.cwd, trust);
-    if (inspected.resourcePath) {
-      const fileDecision = await this.evaluateFile('read', inspected.resourcePath);
+    const resourcePath = inspected.resourceTargets.find((target) => target.path)?.path;
+    if (resourcePath) {
+      const fileDecision = await this.evaluateFile('read', resourcePath);
       if (fileDecision.decision === 'deny') return fileDecision;
     }
     return this.evaluate({
