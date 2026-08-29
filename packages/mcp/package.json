@@ -21,7 +21,8 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@anshrajore/orvex-core": "workspace:*"
+    "@anshrajore/orvex-core": "workspace:*",
+    "@anshrajore/orvex-detectors": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.2",

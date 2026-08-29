@@ -186,6 +186,9 @@ importers:
       '@anshrajore/orvex-core':
         specifier: workspace:*
         version: link:../core
+      '@anshrajore/orvex-detectors':
+        specifier: workspace:*
+        version: link:../detectors
     devDependencies:
       typescript:
         specifier: ^5.7.2
