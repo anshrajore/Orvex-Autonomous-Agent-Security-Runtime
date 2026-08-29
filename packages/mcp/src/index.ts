@@ -15,3 +15,4 @@ export type { McpJsonRpcRequest } from './protocol.js';
 export { normalizeMcpName, normalizeToolPattern } from './normalize.js';
 export { redactMcpValue } from './redact.js';
 export type { RedactedMcpValue } from './redact.js';
+export { inspectMcpResult } from './result.js';
