@@ -46,6 +46,7 @@ export function inspectMcpCall(
   }));
   const redacted = redactMcpValue(call.arguments, limits);
   const blockedByTrust = trust === 'blocked' || trust === 'unknown';
+  const firstTarget = resourceTargets[0];
   return {
     server,
     tool,
@@ -54,6 +55,8 @@ export function inspectMcpCall(
     malformed: false,
     oversized: false,
     resourceTargets,
+    resourcePath: firstTarget?.path,
+    classification: firstTarget?.classification,
     secretFields: redacted.secretFields,
     redactedArguments: redacted.value as Record<string, unknown>,
     reason: blockedByTrust

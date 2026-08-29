@@ -32,6 +32,8 @@ export interface McpInspection {
   malformed: boolean;
   oversized: boolean;
   resourceTargets: McpResourceTarget[];
+  resourcePath?: string;
+  classification?: ResourceClass;
   secretFields: string[];
   redactedArguments: Record<string, unknown>;
   reason: string;
