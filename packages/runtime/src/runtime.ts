@@ -349,7 +349,16 @@ export class OrvexRuntime {
   }
 
   inspectMcpResult(result: unknown): ReturnType<typeof inspectMcpResultPayload> {
-    return inspectMcpResultPayload(result);
+    const inspected = inspectMcpResultPayload(result);
+    if (inspected.secretDetected || inspected.promptInjectionScore >= 25) {
+      this.record('MCP_RESULT', 'mcp.call', { kind: 'other', value: 'MCP_RESULT' }, {
+        decision: inspected.promptInjectionScore >= 25 ? 'ask' : 'allow',
+        reason: inspected.reason,
+        matchedRules: [{ id: inspected.secretDetected ? 'mcp.result.secret-redaction' : 'mcp.result.prompt-signal', effect: inspected.promptInjectionScore >= 25 ? 'ask' : 'allow', priority: 70, capability: 'mcp.call' }],
+        riskScore: Math.max(inspected.promptInjectionScore, inspected.secretDetected ? 75 : 0),
+      });
+    }
+    return inspected;
   }
 
   scanUntrustedText(text: string, label: string): { escalate: boolean; score: number } {
