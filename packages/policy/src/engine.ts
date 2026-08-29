@@ -12,6 +12,7 @@ import { classifyPath, isProtectedSecretPath, resolvePathForPolicy, sha256 } fro
 import type { PolicyDocument } from './schema.js';
 import { hostMatches, pathMatches } from './matchers.js';
 import { profileAskBecomesDeny } from './profiles.js';
+import { minimatch } from 'minimatch';
 
 export interface PolicyRequest {
   actor: Actor;
@@ -292,8 +293,19 @@ export class PolicyEngine {
     context: ExecutionContext,
     rules: Rule[],
   ): PolicyDecision {
-    const server = resource.value.split('/')[0] ?? resource.value;
+    const [server, tool = ''] = resource.value.split('/', 2);
     const trust = this.document.mcp.servers?.[server]?.trust;
+    const serverPolicy = this.document.mcp.servers?.[server];
+    if (serverPolicy?.denyTools?.some((pattern) => minimatch(tool, pattern, { nocase: true }))) {
+      return this.finish('deny', `MCP tool ${server}.${tool} is explicitly denied.`, 90, rules, context, {
+        id: 'mcp.tool-deny', effect: 'deny', priority: 100, capability: 'mcp.call',
+      });
+    }
+    if (serverPolicy?.allowTools && !serverPolicy.allowTools.some((pattern) => minimatch(tool, pattern, { nocase: true }))) {
+      return this.finish('deny', `MCP tool ${server}.${tool} is outside the server allowlist.`, 85, rules, context, {
+        id: 'mcp.tool-not-allowed', effect: 'deny', priority: 95, capability: 'mcp.call',
+      });
+    }
     if (trust === 'blocked' || !trust) {
       const fallback = this.document.mcp.default ?? 'deny';
       return this.finish(
