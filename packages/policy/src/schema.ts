@@ -52,6 +52,8 @@ export const PolicyDocumentSchema = z.object({
         .record(
           z.object({
             trust: mcpTrust,
+            allowTools: z.array(z.string()).optional(),
+            denyTools: z.array(z.string()).optional(),
           }),
         )
         .optional(),
