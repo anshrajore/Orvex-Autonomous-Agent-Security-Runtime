@@ -2,6 +2,7 @@ import { classifyPath, type McpTrust } from '@anshrajore/orvex-core';
 import { assertMcpLimits } from './limits.js';
 import { normalizeMcpName } from './normalize.js';
 import { DEFAULT_MCP_LIMITS, type McpInspection, type McpInspectionLimits } from './types.js';
+import { redactMcpValue } from './redact.js';
 
 export interface McpCall {
   server: string;
@@ -43,6 +44,7 @@ export function inspectMcpCall(
     ...target,
     classification: target.path ? classifyPath(target.path, cwd) : undefined,
   }));
+  const redacted = redactMcpValue(call.arguments, limits);
   const blockedByTrust = trust === 'blocked' || trust === 'unknown';
   return {
     server,
@@ -52,8 +54,8 @@ export function inspectMcpCall(
     malformed: false,
     oversized: false,
     resourceTargets,
-    secretFields: [],
-    redactedArguments: call.arguments,
+    secretFields: redacted.secretFields,
+    redactedArguments: redacted.value as Record<string, unknown>,
     reason: blockedByTrust
       ? `MCP server ${server} trust level is ${trust}.`
       : `MCP ${server}.${tool} contains ${resourceTargets.length} inspected resource target(s).`,
