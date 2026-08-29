@@ -3,7 +3,14 @@ import { z } from 'zod';
 const decision = z.enum(['allow', 'deny', 'ask']);
 const profile = z.enum(['relaxed', 'balanced', 'strict', 'paranoid', 'ci']);
 const mcpTrust = z.enum(['trusted', 'verified', 'restricted', 'unknown', 'blocked']);
-const mcpToolPatterns = z.array(z.string().min(1).max(256).refine((value) => !/[\u0000-\u001f\u007f]/.test(value), 'MCP tool patterns cannot contain control characters.'));
+const mcpToolPatterns = z.array(z.string().min(1).max(256).refine((value) => !hasControlCharacter(value), 'MCP tool patterns cannot contain control characters.'));
+
+function hasControlCharacter(value: string): boolean {
+  return [...value].some((character) => {
+    const code = character.charCodeAt(0);
+    return code < 0x20 || code === 0x7f;
+  });
+}
 
 const pathList = z.array(z.string()).default([]);
 
