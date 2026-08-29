@@ -3,6 +3,7 @@ import { z } from 'zod';
 const decision = z.enum(['allow', 'deny', 'ask']);
 const profile = z.enum(['relaxed', 'balanced', 'strict', 'paranoid', 'ci']);
 const mcpTrust = z.enum(['trusted', 'verified', 'restricted', 'unknown', 'blocked']);
+const mcpToolPatterns = z.array(z.string().min(1).max(256).refine((value) => !/[\u0000-\u001f\u007f]/.test(value), 'MCP tool patterns cannot contain control characters.'));
 
 const pathList = z.array(z.string()).default([]);
 
@@ -52,8 +53,8 @@ export const PolicyDocumentSchema = z.object({
         .record(
           z.object({
             trust: mcpTrust,
-            allowTools: z.array(z.string()).optional(),
-            denyTools: z.array(z.string()).optional(),
+            allowTools: mcpToolPatterns.optional(),
+            denyTools: mcpToolPatterns.optional(),
           }),
         )
         .optional(),
