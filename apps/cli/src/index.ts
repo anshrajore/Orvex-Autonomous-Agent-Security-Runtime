@@ -443,10 +443,19 @@ mcp.command('list').action(() => {
   for (const [name, cfg] of Object.entries(servers)) process.stdout.write(`${name}  trust=${cfg.trust}\n`);
   if (Object.keys(servers).length === 0) process.stdout.write('No MCP servers configured (default deny).\n');
 });
-mcp.command('inspect').argument('<server>').action((server: string) => {
+mcp.command('inspect').argument('<server>').argument('[tool]').action((server: string, tool?: string) => {
   const loaded = loadPolicy({ cwd: process.cwd() });
-  const trust = loaded.document.mcp.servers?.[server]?.trust ?? 'unknown';
-  process.stdout.write(`${server}: ${trust}\n`);
+  const config = loaded.document.mcp.servers?.[server];
+  const trust = config?.trust ?? 'unknown';
+  process.stdout.write(`${server}: trust=${trust}\n`);
+  if (tool) {
+    const allowed = config?.allowTools?.length ? config.allowTools.join(', ') : '*';
+    const denied = config?.denyTools?.length ? config.denyTools.join(', ') : 'none';
+    process.stdout.write(`tool=${tool} allow=${allowed} deny=${denied}\n`);
+  } else {
+    process.stdout.write(`allowTools=${config?.allowTools?.join(', ') || '*'}\n`);
+    process.stdout.write(`denyTools=${config?.denyTools?.join(', ') || 'none'}\n`);
+  }
 });
 mcp.command('trust').argument('<server>').argument('<level>').action((server: string, level: string) => {
   process.stdout.write(`Set ${server} trust=${level} in .orvex.yml (not auto-written for safety).\n`);
