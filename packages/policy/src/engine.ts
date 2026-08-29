@@ -293,7 +293,9 @@ export class PolicyEngine {
     context: ExecutionContext,
     rules: Rule[],
   ): PolicyDecision {
-    const [server, tool = ''] = resource.value.split('/', 2);
+    const parts = resource.value.split('/', 2);
+    const server = parts[0] ?? resource.value;
+    const tool = parts[1] ?? '';
     const trust = this.document.mcp.servers?.[server]?.trust;
     const serverPolicy = this.document.mcp.servers?.[server];
     if (serverPolicy?.denyTools?.some((pattern) => minimatch(tool, pattern, { nocase: true }))) {
